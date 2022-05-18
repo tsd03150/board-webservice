@@ -1,5 +1,6 @@
 package com.kaveloper.portfolio.domain;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,13 +8,15 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Getter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 @Entity
 public class Board {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long bid;
 
     @Column(length = 500, nullable = false)
     private String title;
@@ -23,10 +26,4 @@ public class Board {
 
     private String author;
 
-    @Builder
-    public Board(String title, String content, String author) {
-        this.title = title;
-        this.content = content;
-        this.author = author;
-    }
 }
