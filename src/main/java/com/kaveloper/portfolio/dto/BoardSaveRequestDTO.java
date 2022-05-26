@@ -10,7 +10,7 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class BoardSaveRequestDto {
+public class BoardSaveRequestDTO {
 
     private Long bid;
 

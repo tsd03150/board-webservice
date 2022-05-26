@@ -1,12 +1,10 @@
-package com.kaveloper.portfolio.domain;
+package com.kaveloper.portfolio.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
+@ToString(exclude = "author")
 @Getter
 @Builder
 @AllArgsConstructor
@@ -24,6 +22,16 @@ public class Board {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
 
-    private String author;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Member author;
 
+    private int count;
+
+    public void changeTitle(String title) {
+        this.title = title;
+    }
+
+    public void changeContent(String content) {
+        this.content = content;
+    }
 }
