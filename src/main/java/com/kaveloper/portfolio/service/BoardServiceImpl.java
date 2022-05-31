@@ -1,5 +1,6 @@
 package com.kaveloper.portfolio.service;
 
+import com.kaveloper.portfolio.dto.PageResultDTO;
 import com.kaveloper.portfolio.entity.Board;
 import com.kaveloper.portfolio.entity.Member;
 import com.kaveloper.portfolio.dto.BoardListResponseDTO;
@@ -15,25 +16,25 @@ import java.util.function.Function;
 
 @RequiredArgsConstructor
 @Service
-public class BoardServiceImpl {
+public class BoardServiceImpl implements BoardService{
 
     private final BoardRepository boardRepository;
 
-//    @Override
-//    @Transactional
-//    public Long save(BoardSaveRequestDTO requestDto) {
-//        Board board = dtoTOEntity(requestDto);
-//        boardRepository.save(board);
-//        return board.getBid();
-//    }
+    @Override
+    @Transactional
+    public Long save(BoardSaveRequestDTO requestDto) {
+        Board board = dtoToEntity(requestDto);
+        boardRepository.save(board);
+        return board.getBid();
+    }
 
-//    @Override
-//    public PageResultDTO<BoardListResponseDTO, Object[]> getList(PageRequestDTO pageRequestDTO) {
-//
-//        Function<Object[], BoardListResponseDTO> fn = (en -> entitiyToDTO((Board) en[0], (Member) en[1], (Long) en[2]));
-//
-//        Page<Object[]> result = boardRepository.getBoardListWithSearchCondition(pageRequestDTO);
-//
-//        return new PageResultDTO<>(result, fn);
-//    }
+    @Override
+    public PageResultDTO<BoardListResponseDTO, Object[]> getList(PageRequestDTO pageRequestDTO) {
+
+        Function<Object[], BoardListResponseDTO> fn = (list -> entitiyToDTO((Board) list[0], (Member) list[1], (Long) list[2]));
+
+        Page<Object[]> result = boardRepository.getBoardListWithSearchCondition(pageRequestDTO);
+
+        return new PageResultDTO<>(result, fn);
+    }
 }

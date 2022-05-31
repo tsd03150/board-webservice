@@ -16,16 +16,16 @@ public class BoardController {
 
     private final BoardService boardService;
 
-//    @GetMapping("/list")
-//    public String list(PageRequestDTO pageRequestDto, Model model, @LoginMember SesstionMember member) {
-//
-//        model.addAttribute("result", boardService.getList(pageRequestDto));
-//
-//        if (member != null) {
-//            model.addAttribute("memberName", member.getName());
-//        }
-//        return "board/list";
-//    }
+    @GetMapping("/list")
+    public String list(PageRequestDTO pageRequestDto, Model model, @LoginMember SesstionMember member) {
+
+        model.addAttribute("result", boardService.getList(pageRequestDto));
+
+        if (member != null) {
+            model.addAttribute("memberName", member.getName());
+        }
+        return "board/list";
+    }
 
     @PostMapping
     public Long save(@RequestBody BoardSaveRequestDTO requestDto) {
