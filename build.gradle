@@ -25,14 +25,19 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.8.0'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	implementation 'org.mariadb.jdbc:mariadb-java-client:3.0.4'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
 	//querydsl 추가
 	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
 	annotationProcessor "com.querydsl:querydsl-apt:${queryDslVersion}"
-	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
-	implementation('com.h2database:h2')
 	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+
+	compile group: 'org.thymeleaf.extras', name: 'thymeleaf-extras-java8time'
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 

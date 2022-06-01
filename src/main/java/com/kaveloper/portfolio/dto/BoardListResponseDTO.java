@@ -18,13 +18,15 @@ public class BoardListResponseDTO {
 
     private String content;
 
+    private String author;
+
     private LocalDateTime regDate;
 
     private LocalDateTime modDate;
 
     // 작성한 글이 24시간 이전일 경우 몇 시간 전으로 표시
     // 24시간 이후일 경우 연도-날짜 순으로 표시
-    private int differentTime;
+    private long differentTime;
 
     private int count; // 조회 수
 

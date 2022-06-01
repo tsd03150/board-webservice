@@ -31,10 +31,10 @@ public class BoardServiceImpl implements BoardService{
     @Override
     public PageResultDTO<BoardListResponseDTO, Object[]> getList(PageRequestDTO pageRequestDTO) {
 
-        Function<Object[], BoardListResponseDTO> fn = (list -> entitiyToDTO((Board) list[0], (Member) list[1], (Long) list[2]));
+        Function<Object[], BoardListResponseDTO> fn = (list -> entityToDTO((Board) list[0], (Member) list[1], (Long) list[2]));
 
-        Page<Object[]> result = boardRepository.getBoardListWithSearchCondition(pageRequestDTO);
+        Page<Object[]> content = boardRepository.getBoardListWithSearchCondition(pageRequestDTO);
 
-        return new PageResultDTO<>(result, fn);
+        return new PageResultDTO<>(content, fn);
     }
 }

@@ -7,7 +7,7 @@
 <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" th:replace="fragments/common :: menu('board')"></nav>
 
 <div class="container">
-    <h2>웹 게시판 ver 1.1</h2>
+    <h2>웹 게시판 ver 1.0</h2>
 
         <!--검색 -->
         <form class="form-inline d-flex justify-content-end" method="GET" th:action="@{/board/list}">
@@ -21,7 +21,7 @@
             <div class="form-group mx-sm-1">
                 <label for="keyword" class="sr-only">검색어</label>
                 <input type="text" class="form-control" id="keyword" name = "keyword" th:value="${pageRequestDTO.keyword}">
-                <button type="submit" class="btn btn-light mb-2">검색</button>
+                <button type="submit" class="btn btn-light ml-2">검색</button>
             </div>
         </form>
 
@@ -38,16 +38,16 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="dto : ${result.dtoList}">
+        <tr th:each="dto : ${content.dtoList}">
             <td>[[${dto.bid}]]</td>
 <!--여기서 @ModelAttribute("requestDTO")와 매핑이 된다-->
             <td><b><a th:href="@{/board/detail(bid=${dto.bid},
-                                page= ${result.currentPage},
+                                page= ${content.nowPageNum},
                                 type= ${pageRequestDTO.type},
                                 keyword= ${pageRequestDTO.keyword})}">
                 [[${dto.title}]] <span th:text="${dto.replyCount == 0? '' : '[' + dto.replyCount + ']'}"></span>
             </a></b></td>
-            <td>[[${dto.writerName}]]</td>
+            <td>[[${dto.author}]]</td>
 <!--작성한 글을 기준으로 12시간 이내에 글들은 시간이 나타나고 12시간이 지나면 연도와 달, 일을 출력-->
             <td th:if="${dto.differentTime < 43200}">[[${#temporals.format(dto.regDate, 'HH:mm')}]]</td>
             <td th:if="${dto.differentTime >= 43200}">[[${#temporals.format(dto.regDate, 'yyyy/MM/dd')}]]</td>
@@ -64,18 +64,18 @@
         <nav aria-label="Page navigation example">
             <ul class="pagination justify-content-center">
 
-                <li class="page-item" MemberRepository="${result.prev}" th:if="${result.start} != 1">
-                    <a class="page-link" th:href="@{/board/list(page=${result.start - 1},size=${result.size},type=${pageRequestDTO.type},keyword=${pageRequestDTO.keyword})}"
+                <li class="page-item" MemberRepository="${content.isPrevPage}" th:if="${content.startPageNum} != 1">
+                    <a class="page-link" th:href="@{/board/list(page=${content.startPageNum - 1},size=${content.nowPageSize},type=${pageRequestDTO.type},keyword=${pageRequestDTO.keyword})}"
                        tabindex="-1" aria-disabled="true">Previous</a>
                 </li>
 
-                <li th:class=" 'page-item ' + ${result.currentPage == i? 'active' : ''} "
-                    th:each="i : ${#numbers.sequence(result.start, (result.end == 0? 1 : result.end) )}">
-                    <a class="page-link" th:href="@{/board/list(page=${i},size=${result.size},type=${pageRequestDTO.type},keyword=${pageRequestDTO.keyword})}" th:text="${i}"></a>
+                <li th:class=" 'page-item ' + ${content.nowPageNum == i? 'active' : ''} "
+                    th:each="i : ${#numbers.sequence(content.startPageNum, (content.endPageNum == 0? 1 : content.endPageNum) )}">
+                    <a class="page-link" th:href="@{/board/list(page=${i},size=${content.nowPageNum},type=${pageRequestDTO.type},keyword=${pageRequestDTO.keyword})}" th:text="${i}"></a>
                 </li>
 
-                <li class="page-item" th:if="${result.next}">
-                    <a class="page-link" th:href="@{/board/list(page=${result.end + 1},size=${result.size},type=${pageRequestDTO.type},keyword=${pageRequestDTO.keyword})}">Next</a>
+                <li class="page-item" th:if="${content.isNextPage}">
+                    <a class="page-link" th:href="@{/board/list(page=${content.endPageNum + 1},size=${content.nowPageNum},type=${pageRequestDTO.type},keyword=${pageRequestDTO.keyword})}">Next</a>
                 </li>
 
             </ul>

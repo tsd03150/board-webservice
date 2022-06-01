@@ -1,10 +1,14 @@
 package com.kaveloper.portfolio.service;
 
+import com.kaveloper.portfolio.dto.PageResultDTO;
 import com.kaveloper.portfolio.entity.Board;
 import com.kaveloper.portfolio.dto.BoardListResponseDTO;
 import com.kaveloper.portfolio.dto.BoardSaveRequestDTO;
 import com.kaveloper.portfolio.dto.PageRequestDTO;
 import com.kaveloper.portfolio.entity.Member;
+
+import java.time.Duration;
+import java.time.LocalDateTime;
 
 public interface BoardService {
 
@@ -26,5 +30,22 @@ public interface BoardService {
                 .build();
 
         return board;
+    }
+
+    // entity -> dto로 변환하는 메서드
+    default BoardListResponseDTO entityToDTO(Board board, Member member, Long replyCount) {
+        BoardListResponseDTO boardListResponseDTO = BoardListResponseDTO.builder()
+                .bid(board.getBid())
+                .title(board.getTitle())
+                .content(board.getContent())
+                .author(member.getName())
+                .regDate(board.getRegDate())
+                .modDate(board.getModeDate())
+                //.differentTime(Duration.between(board.getRegDate(), LocalDateTime.now()).getSeconds())
+                .count(board.getCount())
+                .replyCount(replyCount.intValue())
+                .build();
+
+        return boardListResponseDTO;
     }
 }
