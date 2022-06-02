@@ -9,46 +9,52 @@
 <div class="container">
     <h2>웹 게시판 ver 1.0</h2>
 
-        <!--검색 -->
-        <form class="form-inline d-flex justify-content-end" method="GET" th:action="@{/board/list}">
-            <select name="type" class="custom-select">
-                <option th:value="titleOrContent" th:selected="${pageRequestDTO.type == 'titleOrContent'}"}>제목+내용</option>
-                <option th:value="title" th:selected="${pageRequestDTO.type == 'title'}">제목</option>
-                <option th:value="content" th:selected="${pageRequestDTO.type == 'content'}"}>내용</option>
-                <option th:value="author" th:selected="${pageRequestDTO.type == 'author'}"}>작성자</option>
-            </select>
+    <!--검색 -->
+    <form class="form-inline d-flex justify-content-end" method="GET" th:action="@{/board/list}">
+        <select name="type" class="custom-select">
+            <option th:value="titleOrContent" th:selected="${pageRequestDTO.type == 'titleOrContent'}" }>제목+내용</option>
+            <option th:value="title" th:selected="${pageRequestDTO.type == 'title'}">제목</option>
+            <option th:value="content" th:selected="${pageRequestDTO.type == 'content'}" }>내용</option>
+            <option th:value="author" th:selected="${pageRequestDTO.type == 'author'}" }>작성자</option>
+        </select>
 
-            <div class="form-group mx-sm-1">
-                <label for="keyword" class="sr-only">검색어</label>
-                <input type="text" class="form-control" id="keyword" name = "keyword" th:value="${pageRequestDTO.keyword}">
-                <button type="submit" class="btn btn-light ml-2">검색</button>
-            </div>
-        </form>
+        <div class="form-group mx-sm-1">
+            <label for="keyword" class="sr-only">검색어</label>
+            <input type="text" class="form-control" id="keyword" name="keyword" th:value="${pageRequestDTO.keyword}">
+            <button type="submit" class="btn btn-light ml-2">검색</button>
+        </div>
+    </form>
 
     <!--게시판 테이블-->
-    <table class="table table-striped">
+    <table class="table table-striped mt-3">
         <thead>
         <tr>
-            <th scope="col">번호</th>
-            <th scope="col">제목</th>
-            <th scope="col">작성자</th>
-            <th scope="col">날짜</th>
-            <th scope="col">조회</th>
-
+            <th scope="col" style="color:dodgerblue">번호</th>
+            <th scope="col" style="color:dodgerblue">제목</th>
+            <th scope="col" style="color:dodgerblue">작성자</th>
+            <th scope="col" style="color:dodgerblue">날짜</th>
+            <th scope="col" style="color:dodgerblue">조회</th>
         </tr>
         </thead>
+
         <tbody>
         <tr th:each="dto : ${content.dtoList}">
-            <td>[[${dto.bid}]]</td>
-<!--여기서 @ModelAttribute("requestDTO")와 매핑이 된다-->
-            <td><b><a th:href="@{/board/detail(bid=${dto.bid},
+            <td th:if="${dto.notice == 1}"><b>공지</b></td>
+            <td th:if="${dto.notice == 0}">[[${dto.bid}]]</td>
+            <!--여기서 @ModelAttribute("requestDTO")와 매핑이 된다-->
+
+            <td>
+                <a th:href="@{/board/detail(bid=${dto.bid},
                                 page= ${content.nowPageNum},
                                 type= ${pageRequestDTO.type},
-                                keyword= ${pageRequestDTO.keyword})}">
-                [[${dto.title}]] <span th:text="${dto.replyCount == 0? '' : '[' + dto.replyCount + ']'}"></span>
-            </a></b></td>
+                                keyword= ${pageRequestDTO.keyword})}" th:style= "${dto.notice == 1? 'color:black;font-weight:bold;' : 'color:black;'}">
+                    [[${dto.title}]]
+                    <span th:text="${dto.replyCount == 0? '' : '[' + dto.replyCount + ']'}"></span>
+                </a>
+            </td>
+
             <td>[[${dto.author}]]</td>
-<!--작성한 글을 기준으로 12시간 이내에 글들은 시간이 나타나고 12시간이 지나면 연도와 달, 일을 출력-->
+            <!--작성한 글을 기준으로 12시간 이내에 글들은 시간이 나타나고 12시간이 지나면 연도와 달, 일을 출력-->
             <td th:if="${dto.differentTime < 43200}">[[${#temporals.format(dto.regDate, 'HH:mm')}]]</td>
             <td th:if="${dto.differentTime >= 43200}">[[${#temporals.format(dto.regDate, 'yyyy/MM/dd')}]]</td>
             <td>[[${dto.count}]]</td>
@@ -56,38 +62,35 @@
         </tbody>
     </table>
 
-    <div class="d-flex justify-content-end">
+    <div class="d-flex justify-content-end mt-5">
         <a type="button" class="btn btn-primary createBtn" th:href="@{/board/create}">글쓰기</a>
     </div>
 
-        <!--페이징-->
-        <nav aria-label="Page navigation example">
-            <ul class="pagination justify-content-center">
+    <!--페이징-->
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
 
-                <li class="page-item" MemberRepository="${content.isPrevPage}" th:if="${content.startPageNum} != 1">
-                    <a class="page-link" th:href="@{/board/list(page=${content.startPageNum - 1},size=${content.nowPageSize},type=${pageRequestDTO.type},keyword=${pageRequestDTO.keyword})}"
-                       tabindex="-1" aria-disabled="true">Previous</a>
-                </li>
+            <li class="page-item" MemberRepository="${content.isPrevPage}" th:if="${content.startPageNum} != 1">
+                <a class="page-link"
+                   th:href="@{/board/list(page=${content.startPageNum - 1},size=${content.nowPageSize},type=${pageRequestDTO.type},keyword=${pageRequestDTO.keyword})}"
+                   tabindex="-1" aria-disabled="true">Previous</a>
+            </li>
 
-                <li th:class=" 'page-item ' + ${content.nowPageNum == i? 'active' : ''} "
-                    th:each="i : ${#numbers.sequence(content.startPageNum, (content.endPageNum == 0? 1 : content.endPageNum) )}">
-                    <a class="page-link" th:href="@{/board/list(page=${i},size=${content.nowPageNum},type=${pageRequestDTO.type},keyword=${pageRequestDTO.keyword})}" th:text="${i}"></a>
-                </li>
+            <li th:class=" 'page-item ' + ${content.nowPageNum == i? 'active' : ''} "
+                th:each="i : ${#numbers.sequence(content.startPageNum, (content.endPageNum == 0? 1 : content.endPageNum) )}">
+                <a class="page-link"
+                   th:href="@{/board/list(page=${i},size=${content.nowPageSize},type=${pageRequestDTO.type},keyword=${pageRequestDTO.keyword})}"
+                   th:text="${i}"></a>
+            </li>
 
-                <li class="page-item" th:if="${content.isNextPage}">
-                    <a class="page-link" th:href="@{/board/list(page=${content.endPageNum + 1},size=${content.nowPageNum},type=${pageRequestDTO.type},keyword=${pageRequestDTO.keyword})}">Next</a>
-                </li>
+            <li class="page-item" th:if="${content.isNextPage}">
+                <a class="page-link"
+                   th:href="@{/board/list(page=${content.endPageNum + 1},size=${content.nowPageSize},type=${pageRequestDTO.type},keyword=${pageRequestDTO.keyword})}">Next</a>
+            </li>
 
-            </ul>
-        </nav>
+        </ul>
+    </nav>
 </div>
-
-<script th:inline="javascript">
-
-
-</script>
-
-
 </main><!-- /.container -->
 
 </body>
@@ -96,8 +99,8 @@
 </html>
 
 <script th:inline="javascript">
-    $(".createBtn").click(function() {
-        if([[${memberName}]]==null){
+    $(".createBtn").click(function () {
+        if ([[${memberName}]] == null) {
             alert("로그인 후 글을 작성할 수 있습니다.");
         }
     });

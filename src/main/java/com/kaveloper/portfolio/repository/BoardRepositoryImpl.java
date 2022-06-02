@@ -6,6 +6,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -22,6 +23,7 @@ import static com.kaveloper.portfolio.entity.QBoard.*;
 import static com.kaveloper.portfolio.entity.QMember.member;
 import static com.kaveloper.portfolio.entity.QReply.reply;
 
+@Log4j2
 @Repository
 public class BoardRepositoryImpl implements CustomBoardRepository {
 
@@ -52,10 +54,18 @@ public class BoardRepositoryImpl implements CustomBoardRepository {
                 .orderBy(board.bid.desc())
                 .fetch();
 
+        // fetchResults(), fetchCount() 메서드가 deprecated 되었기 때문에
+        // 전체 게시글이 몇 개 인지를 count 하는 쿼리를 따로 작성해두었다
+        Long total = query.select(board.count())
+                .from(board)
+                .where(checkTypeOrKeywordEq(requestDTO.getType(), requestDTO.getKeyword()))
+                .fetchOne();
+
         // content에는 이제 board를 기준으로 조건 검색 및 페이징 처리가 끝난 투플들이다
         // 이를 반환할 때 List<Object[]> 타입으로 변환을 해줘야 한다
         // 하나의 게시글을 기준으로 Object[] 배열에는 [0]에 board, [1]에 member, [2]에 reply.count() 값이 저장된다
-        return new PageImpl<>(content.stream().map(Tuple::toArray).collect(Collectors.toList()), pageable, content.size());
+
+        return new PageImpl<>(content.stream().map(Tuple::toArray).collect(Collectors.toList()), pageable, total);
     }
 
     // requestDTO에 type에 따라서

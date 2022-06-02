@@ -32,4 +32,6 @@ public class BoardListResponseDTO {
 
     private int replyCount; // 댓글 수
 
+    private int notice; // 공지 사항 여부
+
 }

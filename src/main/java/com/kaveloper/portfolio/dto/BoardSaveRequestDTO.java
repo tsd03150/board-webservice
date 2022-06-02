@@ -20,6 +20,9 @@ public class BoardSaveRequestDTO {
 
     private String content;
 
+    // 공지사항 여부
+    private int notice;
+
     private String author;
 
 }

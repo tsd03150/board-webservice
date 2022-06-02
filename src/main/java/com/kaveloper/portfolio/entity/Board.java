@@ -25,6 +25,9 @@ public class Board extends BaseEntity{
     @ManyToOne(fetch = FetchType.LAZY)
     private Member author;
 
+    // 공지 여부
+    private int notice;
+
     private int count;
 
     public void changeTitle(String title) {
