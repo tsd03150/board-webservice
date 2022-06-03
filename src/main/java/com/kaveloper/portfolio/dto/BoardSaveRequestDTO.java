@@ -21,8 +21,9 @@ public class BoardSaveRequestDTO {
     private String content;
 
     // 공지사항 여부
-    private int notice;
+    private int nid;
 
-    private String author;
+    // 작성자 member id
+    private Long mid;
 
 }

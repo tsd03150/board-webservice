@@ -41,7 +41,7 @@ public interface BoardService {
                 .author(member.getName())
                 .regDate(board.getRegDate())
                 .modDate(board.getModeDate())
-                .notice(board.getNotice())
+                .nid(board.getNid())
                 //.differentTime(Duration.between(board.getRegDate(), LocalDateTime.now()).getSeconds())
                 .count(board.getCount())
                 .replyCount(replyCount.intValue())

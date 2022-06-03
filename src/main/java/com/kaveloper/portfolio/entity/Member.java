@@ -22,6 +22,9 @@ import javax.persistence.*;
 public class Member extends BaseEntity{
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long mid;
+
     private String name;
 
     @Column(nullable = false)

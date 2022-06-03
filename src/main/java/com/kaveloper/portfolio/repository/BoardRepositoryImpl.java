@@ -38,7 +38,8 @@ public class BoardRepositoryImpl implements CustomBoardRepository {
     @Override
     public Page<Object[]> getBoardListWithSearchCondition(PageRequestDTO requestDTO) {
 
-        Pageable pageable = requestDTO.getPageable(Sort.by("bid").descending());
+        Pageable pageable = requestDTO.getPageable(Sort.by("nid").descending()
+                .and(Sort.by("bid").descending()));
 
         JPAQuery<Tuple> tuple = query
                 .select(board, member, reply.count())
@@ -51,7 +52,7 @@ public class BoardRepositoryImpl implements CustomBoardRepository {
         List<Tuple> content = tuple.where(checkTypeOrKeywordEq(requestDTO.getType(), requestDTO.getKeyword()))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
-                .orderBy(board.bid.desc())
+                .orderBy(board.nid.desc(), board.bid.desc())
                 .fetch();
 
         // fetchResults(), fetchCount() 메서드가 deprecated 되었기 때문에

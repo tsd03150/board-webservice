@@ -39,15 +39,15 @@
 
         <tbody>
         <tr th:each="dto : ${content.dtoList}">
-            <td th:if="${dto.notice == 1}"><b>공지</b></td>
-            <td th:if="${dto.notice == 0}">[[${dto.bid}]]</td>
+            <td th:if="${dto.nid == 1}"><b>공지</b></td>
+            <td th:if="${dto.nid == 0}">[[${dto.bid}]]</td>
             <!--여기서 @ModelAttribute("requestDTO")와 매핑이 된다-->
 
             <td>
                 <a th:href="@{/board/detail(bid=${dto.bid},
                                 page= ${content.nowPageNum},
                                 type= ${pageRequestDTO.type},
-                                keyword= ${pageRequestDTO.keyword})}" th:style= "${dto.notice == 1? 'color:black;font-weight:bold;' : 'color:black;'}">
+                                keyword= ${pageRequestDTO.keyword})}" th:style= "${dto.nid == 1? 'color:black;font-weight:bold;' : 'color:black;'}">
                     [[${dto.title}]]
                     <span th:text="${dto.replyCount == 0? '' : '[' + dto.replyCount + ']'}"></span>
                 </a>
