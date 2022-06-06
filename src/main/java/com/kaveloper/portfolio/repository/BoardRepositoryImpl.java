@@ -57,10 +57,12 @@ public class BoardRepositoryImpl implements CustomBoardRepository {
 
         // fetchResults(), fetchCount() 메서드가 deprecated 되었기 때문에
         // 전체 게시글이 몇 개 인지를 count 하는 쿼리를 따로 작성해두었다
-        Long total = query.select(board.count())
+        long total = query.select(board.count())
                 .from(board)
                 .where(checkTypeOrKeywordEq(requestDTO.getType(), requestDTO.getKeyword()))
-                .fetchOne();
+                .fetch().size();
+
+        log.info("전체 크기는? " + total);
 
         // content에는 이제 board를 기준으로 조건 검색 및 페이징 처리가 끝난 투플들이다
         // 이를 반환할 때 List<Object[]> 타입으로 변환을 해줘야 한다

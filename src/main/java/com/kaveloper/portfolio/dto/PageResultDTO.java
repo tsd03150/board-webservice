@@ -1,7 +1,6 @@
 package com.kaveloper.portfolio.dto;
 
 import lombok.Data;
-import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -10,7 +9,6 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-@Log4j2
 @Data
 public class PageResultDTO<DTO, EN> {
 
@@ -50,7 +48,6 @@ public class PageResultDTO<DTO, EN> {
         // 그래서 이 dtoList에는 사용자가 요청한 조건들에 맞는 게시글 목록에 조회할 데이터들이 들어있다
         dtoList = content.stream().map(fn).collect(Collectors.toList());
         totalPageNum = content.getTotalPages();
-        log.info("????? " + totalPageNum);
 
         makePageList(content.getPageable());
     }

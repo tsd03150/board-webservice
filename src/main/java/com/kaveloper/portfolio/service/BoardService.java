@@ -20,7 +20,7 @@ public interface BoardService {
 
     // dto -> entity로 변환하는 메서드
     default Board dtoToEntity(BoardSaveRequestDTO dto) {
-        Member member = Member.builder().name(dto.getAuthor()).build();
+        Member member = Member.builder().mid(dto.getMid()).build();
 
         Board board = Board.builder()
                 .bid(dto.getBid())
