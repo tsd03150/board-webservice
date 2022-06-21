@@ -1,5 +1,7 @@
 package com.kaveloper.portfolio.controller;
 
+import com.kaveloper.portfolio.config.auth.LoginMember;
+import com.kaveloper.portfolio.config.auth.dto.SessionMember;
 import com.kaveloper.portfolio.dto.BoardSaveRequestDTO;
 import com.kaveloper.portfolio.dto.PageRequestDTO;
 import com.kaveloper.portfolio.service.BoardService;
@@ -9,7 +11,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-@Log4j2
+import javax.servlet.http.HttpSession;
+
 @RequiredArgsConstructor
 @RequestMapping("/board")
 @Controller
@@ -18,9 +21,13 @@ public class BoardController {
     private final BoardService boardService;
 
     @GetMapping("/list")
-    public String list(PageRequestDTO pageRequestDTO, Model model) {
+    public String list(PageRequestDTO pageRequestDTO, Model model, @LoginMember SessionMember member) {
 
         model.addAttribute("content", boardService.getList(pageRequestDTO));
+
+        if (member != null) {
+            model.addAttribute("memberName", member.getName());
+        }
 
         return "board/list";
     }

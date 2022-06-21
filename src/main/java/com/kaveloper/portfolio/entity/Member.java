@@ -4,12 +4,6 @@ import lombok.*;
 
 import javax.persistence.*;
 
-@ToString
-@Getter
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-@Entity
 
 // 우선 Board -> Member 단방향 관계
 // 게시판은 글을 작성한 회원의 정보를 참조해야 하고
@@ -19,6 +13,12 @@ import javax.persistence.*;
 // 근데 이 방법도 그냥 게시글을 불러올 때 조건을 회원을 걸어준다면
 // 굳이 양방향으로 안해도 될 것 같은데... 이것은 생각해보자
 
+@ToString
+@Getter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
 public class Member extends BaseEntity{
 
     @Id
@@ -35,6 +35,9 @@ public class Member extends BaseEntity{
     private Role role;
 
     private String picture;
+
+    // 로그인 한 웹 사이트 코드 (google, naver, ...)
+   private String webCode;
 
     public Member updateProfile(String name, String picture) {
         this.name = name;
