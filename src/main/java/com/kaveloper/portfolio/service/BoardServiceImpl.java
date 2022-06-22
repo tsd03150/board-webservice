@@ -24,10 +24,18 @@ public class BoardServiceImpl implements BoardService{
 
     @Override
     @Transactional
-    public Long save(BoardSaveRequestDTO requestDto) {
-        Board board = dtoToEntity(requestDto);
+    public void saveBoard(BoardSaveRequestDTO requestDto, Long mid) {
+        Board board = dtoToEntity(requestDto, mid);
         boardRepository.save(board);
-        return board.getBid();
+    }
+
+    @Override
+    public BoardListResponseDTO getBoard(Long bid) {
+        Object result = boardRepository.getBoardByBid(bid);
+
+        Object[] list = (Object[]) result;
+
+        return entityToDTO((Board) list[0], (Member) list[1], (Long) list[2]);
     }
 
     @Override

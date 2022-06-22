@@ -63,7 +63,7 @@
     </table>
 
     <div class="d-flex justify-content-end mt-5">
-        <a type="button" class="btn btn-primary createBtn" th:href="@{/board/create}">글쓰기</a>
+        <a type="button" class="btn btn-primary writeBtn" th:href="@{/board/write}">글쓰기</a>
     </div>
 
     <!--페이징-->
@@ -99,7 +99,7 @@
 </html>
 
 <script th:inline="javascript">
-    $(".createBtn").click(function () {
+    $(".writeBtn").click(function () {
         if ([[${memberName}]] == null) {
             alert("로그인 후 글을 작성할 수 있습니다.");
         }

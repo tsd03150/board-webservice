@@ -1,0 +1,28 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/common :: head('home')"></head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<body>
+
+<div class="container" style="max-width: 600px">
+  <div class="py-5 text-center">
+    <h2>로그인 화면</h2> </div>
+  <div class="row">
+    <div class="col">
+      <button class="w-100 btn btn-dark btn-lg" type="button"
+              th:onclick="|location.href='/oauth2/authorization/google'|">
+        구글 로그인
+      </button>
+    </div>
+    <div class="col">
+      <button class="w-100 btn btn-success btn-lg" type="button"
+              th:onclick="|location.href='/oauth2/authorization/naver'|" >
+        네이버 로그인
+      </button>
+    </div>
+  </div>
+  <hr class="my-4">
+</div> <!-- /container -->
+</body>
+</html>

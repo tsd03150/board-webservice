@@ -18,9 +18,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // url별 권한 관리 설정
                 .authorizeRequests()
                 // permitAll()은 전체 사용자가 이용 가능
-                .antMatchers("/", "/starter-template.css", "/css/**", "/images/**", "/js/**", "/profile", "/board/list/**", "/board/detail/**").permitAll()
+                .antMatchers("/", "/starter-template.css", "/css/**", "/images/**", "/js/**", "/profile", "/board/list/**", "/board/detail/**", "/board/login/**").permitAll()
                 // 나머지 url은 인증된 사용자만 사용가능
                 .anyRequest().authenticated()
+
+                .and()
+                .formLogin()
+                .loginPage("/board/login")
 
                 // 로그 아웃 설정
                 .and()
@@ -30,8 +34,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 로그인 성공 후 customOAuth2UserService UserService 구현체로 이동
                 .and()
                 .oauth2Login()
+                .successHandler(new LoginSuccessHandler())
                 .userInfoEndpoint()
                 .userService(customOAuth2UserService);
-
     }
 }
