@@ -18,7 +18,7 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 @Service
 @Log4j2
-public class BoardServiceImpl implements BoardService{
+public class BoardServiceImpl implements BoardService {
 
     private final BoardRepository boardRepository;
 
@@ -36,6 +36,21 @@ public class BoardServiceImpl implements BoardService{
         Object[] list = (Object[]) result;
 
         return entityToDTO((Board) list[0], (Member) list[1], (Long) list[2]);
+    }
+
+    @Override
+    @Transactional
+    public void upViewCount(Long bid) {
+        boardRepository.upViewCount(bid);
+    }
+
+    @Override
+    @Transactional
+    public void updateBoard(BoardSaveRequestDTO requestDTO) {
+        Board board = boardRepository.getById(requestDTO.getBid());
+        board.changeTitle(requestDTO.getTitle());
+        board.changeContent(requestDTO.getContent());
+        boardRepository.save(board);
     }
 
     @Override

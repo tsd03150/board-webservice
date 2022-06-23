@@ -5,3 +5,8 @@ body {
     padding: 3rem 1.5rem;
     text-align: center;
 }
+.txt_bar {
+    margin-left: 10px;
+    margin-right: 10px;
+    color: lightgray;
+}

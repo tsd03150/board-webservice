@@ -18,6 +18,8 @@ public class BoardListResponseDTO {
 
     private String content;
 
+    private Long mid;
+
     private String author;
 
     private LocalDateTime regDate;

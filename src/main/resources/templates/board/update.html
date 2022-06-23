@@ -1,0 +1,99 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/common :: head('board-update')"></head>
+
+<body>
+<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" th:replace="fragments/common :: menu('board')"></nav>
+
+<div class="container">
+    <h2>글 수정</h2>
+    <hr>
+    <!--페이지 번호-->
+    <form th:action="@{/board/update}" th:object="${boardDTO}" method="post">
+        <input type="hidden" name="page" th:value="${requestDTO.page}">
+        <input type="hidden" name="type" th:value="${requestDTO.type}">
+        <input type="hidden" name="keyword" th:value="${requestDTO.keyword}">
+        <input type="hidden" name="bid" th:value="${boardDTO.bid}">
+        <input type="hidden" name="mid" th:value="${boardDTO.mid}">
+
+        <div class="form-group">
+            <label>제목</label>
+            <input type="text" class="form-control"
+                   th:class="${#fields.hasErrors('title')} ? 'form-control is-invalid' : 'form-control'"
+                   th:field="*{title}">
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Incorrect date</div>
+        </div>
+
+        <div class="form-group">
+            <label>내용</label>
+            <textarea class="form-control" rows="15" th:field="*{content}">본문</textarea>
+        </div>
+
+        <div class="form-group">
+            <label>작성자</label>
+            <input type="text" class="form-control" id=author name="author" th:value="${memberName}" readonly>
+        </div>
+
+    <hr>
+
+    <div class="d-flex bd-highlight mb-3">
+        <div class="mr-auto p-2 bd-highlight"></div>
+
+        <div class="p-2 bd-highlight">
+            <a type="button" class="btn btn-secondary cancelBtn">취소</a>
+        </div>
+
+        <div class="p-2 bd-highlight">
+            <button type="button" class="btn btn-danger deleteBtn">삭제</button>
+        </div>
+
+        <div class="p-2 bd-highlight">
+            <div class="d-flex justify-content-end">
+                <button type="button" class="btn btn-primary updateBtn">완료</button>
+            </div>
+        </div>
+
+    </div>
+
+    </form>
+</div>
+</main><!-- /.container -->
+
+</body>
+<div th:replace="fragments/common :: footer"></div>
+</html>
+
+<script th:inline="javascript">
+
+    var actionForm = $("form"); //form 태그 객체
+
+    $(".cancelBtn").click(function () {
+        if (confirm("글 작성을 취소하시겠습니까?")) {
+            window.location.replace("/board/list");
+        }
+    });
+
+    $(".deleteBtn").click(function () {
+        if (!confirm("글을 삭제하시겠습니까?")) {
+            return;
+        }
+
+        actionForm
+            .attr("action", "/board/delete")
+            .attr("method", "post");
+
+        actionForm.submit();
+        alert("정상적으로 삭제되었습니다.");
+
+    });
+
+    $(".updateBtn").click(function () {
+        actionForm
+            .attr("action", "/board/update") // action 요소에 /board/update를 가져온다
+            .attr("method", "post") // action 요소에 post를 가져온다
+            .submit();
+
+    });
+</script>
+
+

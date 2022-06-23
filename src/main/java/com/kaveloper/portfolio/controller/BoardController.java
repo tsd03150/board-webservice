@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 @Slf4j
@@ -52,9 +53,8 @@ public class BoardController {
     }
 
     @PostMapping("/write")
-    public String saveBoard(@Valid BoardSaveRequestDTO boardSaveRequestDTO, BindingResult bindingResult,
-                            @LoginMember SessionMember member, Model model) {
-
+    public String writeBoard(@Valid @ModelAttribute("boardSaveRequestDTO") BoardSaveRequestDTO boardSaveRequestDTO,
+                             BindingResult bindingResult, @LoginMember SessionMember member, Model model) {
         if (bindingResult.hasErrors()) {
             // @Valid 제약을 지키지 못하는 경우
             // 다시 글작성 뷰가 나와야 하는데
@@ -75,12 +75,48 @@ public class BoardController {
     public void detail(@ModelAttribute("requestDTO") PageRequestDTO requestDTO, Long bid, Model model,
                        @LoginMember SessionMember member) {
         BoardListResponseDTO boardDTO = boardService.getBoard(bid);
+        boardService.upViewCount(bid); // 게시판 글을 누르게 되면 조회수 증가
 
         if (member != null) {
             model.addAttribute("memberName", member.getName());
+            model.addAttribute("mid", member.getMid());
         }
 
         model.addAttribute("boardDTO", boardDTO);
-
     }
+
+    @GetMapping("/update")
+    public void update(@ModelAttribute("requestDTO") PageRequestDTO requestDTO, Long bid, Model model,
+                       @LoginMember SessionMember member) {
+        BoardListResponseDTO boardDTO = boardService.getBoard(bid);
+
+        if (member != null) {
+            model.addAttribute("memberName", member.getName());
+            model.addAttribute("mid", member.getMid());
+        }
+
+        model.addAttribute("boardDTO", boardDTO);
+    }
+
+    @PostMapping("/update")
+    public String updateBoard(@Valid @ModelAttribute("boardDTO") BoardSaveRequestDTO boardDTO, BindingResult bindingResult,
+                              @ModelAttribute("requestDTO") PageRequestDTO requestDTO, @LoginMember SessionMember member, Model model) {
+
+        if (bindingResult.hasErrors()) {
+            // @Valid 제약을 지키지 못하는 경우
+            // 다시 글작성 뷰가 나와야 하는데
+            // 이 때 로그인한 작성자 이름 또한 다시 나와야 한다
+            if (member != null) {
+                model.addAttribute("memberName", member.getName());
+            }
+            return "/board/update";
+        }
+
+        boardService.updateBoard(boardDTO);
+        log.info("업데이트 할 글 : {}", boardDTO);
+
+        return "redirect:/board/list";
+    }
+
+
 }

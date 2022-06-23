@@ -21,6 +21,13 @@ public interface BoardService {
     // 게시글 조회 메서드 (전체 게시글 및 검색 조건, 페이징에 따른 조회 포함)
     PageResultDTO<BoardListResponseDTO, Object[]> getList(PageRequestDTO pageRequestDTO);
 
+    // 특정 게시글 조회 수 증가
+    void upViewCount(Long bid);
+
+    // 게시글 수정 메서드
+    void updateBoard(BoardSaveRequestDTO saveRequestDTO);
+
+
     // dto -> entity로 변환하는 메서드
     default Board dtoToEntity(BoardSaveRequestDTO dto, Long mid) {
         Member member = Member.builder().mid(mid).build();
@@ -41,6 +48,7 @@ public interface BoardService {
                 .bid(board.getBid())
                 .title(board.getTitle())
                 .content(board.getContent())
+                .mid(member.getMid())
                 .author(member.getName())
                 .regDate(board.getRegDate())
                 .modDate(board.getModeDate())
