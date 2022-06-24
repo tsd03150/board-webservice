@@ -5,6 +5,7 @@ import com.kaveloper.portfolio.config.auth.dto.SessionMember;
 import com.kaveloper.portfolio.dto.BoardListResponseDTO;
 import com.kaveloper.portfolio.dto.BoardSaveRequestDTO;
 import com.kaveloper.portfolio.dto.PageRequestDTO;
+import com.kaveloper.portfolio.file.FileStore;
 import com.kaveloper.portfolio.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,9 +13,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.io.IOException;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -23,10 +25,22 @@ import javax.validation.Valid;
 public class BoardController {
 
     private final BoardService boardService;
+    private final FileStore fileStore;
 
     @GetMapping("/login")
     public String login() {
         return "board/login";
+    }
+
+    @GetMapping("/popupImg")
+    public String addImg() {
+        return "board/popupImg";
+    }
+
+    @PostMapping("/popupImg")
+    public String saveImg() {
+        log.info("접속 완료 ");
+        return "redirect:/board/list";
     }
 
     @GetMapping("/list")
@@ -54,7 +68,7 @@ public class BoardController {
 
     @PostMapping("/write")
     public String writeBoard(@Valid @ModelAttribute("boardSaveRequestDTO") BoardSaveRequestDTO boardSaveRequestDTO,
-                             BindingResult bindingResult, @LoginMember SessionMember member, Model model) {
+                             BindingResult bindingResult, @LoginMember SessionMember member, Model model) throws IOException {
         if (bindingResult.hasErrors()) {
             // @Valid 제약을 지키지 못하는 경우
             // 다시 글작성 뷰가 나와야 하는데
@@ -100,7 +114,8 @@ public class BoardController {
 
     @PostMapping("/update")
     public String updateBoard(@Valid @ModelAttribute("boardDTO") BoardSaveRequestDTO boardDTO, BindingResult bindingResult,
-                              @ModelAttribute("requestDTO") PageRequestDTO requestDTO, @LoginMember SessionMember member, Model model) {
+                              @ModelAttribute("requestDTO") PageRequestDTO requestDTO, @LoginMember SessionMember member,
+                              Model model, RedirectAttributes redirectAttributes) {
 
         if (bindingResult.hasErrors()) {
             // @Valid 제약을 지키지 못하는 경우
@@ -109,7 +124,7 @@ public class BoardController {
             if (member != null) {
                 model.addAttribute("memberName", member.getName());
             }
-            return "/board/update";
+            return "board/update";
         }
 
         boardService.updateBoard(boardDTO);
@@ -117,6 +132,4 @@ public class BoardController {
 
         return "redirect:/board/list";
     }
-
-
 }

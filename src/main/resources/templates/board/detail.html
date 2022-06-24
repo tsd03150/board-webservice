@@ -11,7 +11,7 @@
     <hr>
     <div class="form-group">
         [[${boardDTO.author}]] <span class="txt_bar"> | </span>
-        [[${#temporals.format(boardDTO.modDate, 'yyyy/MM/dd HH:mm:ss')}]] <span class="txt_bar"> | </span>
+        [[${#temporals.format(boardDTO.regDate, 'yyyy/MM/dd HH:mm:ss')}]] <span class="txt_bar"> | </span>
         조회 [[${boardDTO.count}]]
     </div>
 
@@ -104,7 +104,6 @@
 </main><!-- /.container -->
 </body>
 <div th:replace="fragments/common :: footer"></div>
-</html>
 <!-- JQuery -->
 <script th:inline="javascript">
 
@@ -172,5 +171,5 @@
             }
         })
     });
-
 </script>
+</html>

@@ -2,8 +2,10 @@ package com.kaveloper.portfolio.dto;
 
 import com.sun.istack.NotNull;
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.Size;
+import java.util.List;
 
 @ToString
 @Builder
@@ -25,5 +27,8 @@ public class BoardSaveRequestDTO {
 
     // 작성자 member id
     private Long mid;
+
+    // 이미지 파일
+    private List<MultipartFile> imageFiles;
 
 }

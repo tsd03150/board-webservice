@@ -1,0 +1,28 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/common :: head('이미지 업로드 하기')"></head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<body style="padding-top: 60px;padding-left: 15px">
+<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top imgPopup"><h5>이미지 업로드 하기</h5></nav>
+
+<form th:action="@{/board/popupImg}" method="post">
+    <input type="file" multiple="multiple" name="imageFiles">
+
+    <hr>
+
+    <div class="text-right">
+        <button type="submit" class="btn btn-primary addImg" style="margin-right: 15px">적용</button>
+    </div>
+</form>
+
+</body>
+<div th:replace="fragments/common :: footer"></div>
+
+<script th:inline="javascript">
+    $(".addImg").click(function () {
+        console.log("버튼 적용이 완료 되었습니다.");
+    });
+</script>
+
+</html>

@@ -20,7 +20,7 @@
         </div>
 
         <div class="form-group">
-            <label>내용</label>
+            <label>내용</label> <span class="txt_bar"> | </span> <input type="button" value="이미지" class="popupImg">
             <textarea class="form-control" th:field="*{content}" rows="15"></textarea>
         </div>
 
@@ -42,12 +42,16 @@
 
 </body>
 <div th:replace="fragments/common :: footer"></div>
-</html>
-
 <script th:inline="javascript">
     window.cancel = function() {
         if (confirm("글 작성을 취소하시겠습니까?")) {
             window.location.replace("/board/list");
         }
     }
+
+    $(".popupImg").click(function () {
+        window.open("/board/popupImg", "팝업 테스트", "width=800,height=600,top=100,left=100");
+    });
 </script>
+</html>
+
