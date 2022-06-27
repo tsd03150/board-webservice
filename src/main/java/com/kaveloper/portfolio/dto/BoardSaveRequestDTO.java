@@ -28,7 +28,5 @@ public class BoardSaveRequestDTO {
     // 작성자 member id
     private Long mid;
 
-    // 이미지 파일
     private List<MultipartFile> imageFiles;
-
 }

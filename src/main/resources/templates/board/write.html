@@ -16,17 +16,26 @@
             <input type="text" class="form-control"
                    th:class="${#fields.hasErrors('title')} ? 'form-control is-invalid' : 'form-control'"
                    th:field="*{title}" placeholder="제목을 입력해주세요.">
-            <div class="invalid-feedback" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Incorrect date</div>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Incorrect date
+            </div>
         </div>
 
         <div class="form-group">
-            <label>내용</label> <span class="txt_bar"> | </span> <input type="button" value="이미지" class="popupImg">
-            <textarea class="form-control" th:field="*{content}" rows="15"></textarea>
+            <label>내용</label>
+            <textarea class="form-control" th:field="*{content}" rows="15">
+
+            </textarea>
         </div>
 
         <div class="form-group">
-            <label>작성자</label>
-            <input type="text" class="form-control" id=author name="author" th:value="${memberName}" readonly>
+            <div class="custom-file">
+                <label for="imageFiles" class="btn btn-primary">이미지</label>
+                <input type="file" class="custom-file-input" multiple="multiple" id="imageFiles" th:field="*{imageFiles}" onchange='test();'>
+            </div>
+
+            <label>첨부 파일</label>
+
+
         </div>
 
         <hr>
@@ -43,15 +52,21 @@
 </body>
 <div th:replace="fragments/common :: footer"></div>
 <script th:inline="javascript">
-    window.cancel = function() {
+    window.cancel = function () {
         if (confirm("글 작성을 취소하시겠습니까?")) {
             window.location.replace("/board/list");
         }
     }
 
+    window.test = function () {
+        console.log("테스트");
+    }
+
     $(".popupImg").click(function () {
         window.open("/board/popupImg", "팝업 테스트", "width=800,height=600,top=100,left=100");
     });
+
+
 </script>
 </html>
 

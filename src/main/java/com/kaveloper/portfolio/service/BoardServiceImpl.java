@@ -7,6 +7,7 @@ import com.kaveloper.portfolio.dto.BoardListResponseDTO;
 import com.kaveloper.portfolio.dto.BoardSaveRequestDTO;
 import com.kaveloper.portfolio.dto.PageRequestDTO;
 import com.kaveloper.portfolio.repository.BoardRepository;
+import com.kaveloper.portfolio.repository.ImgRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
@@ -21,6 +22,7 @@ import java.util.function.Function;
 public class BoardServiceImpl implements BoardService {
 
     private final BoardRepository boardRepository;
+    private final ImgRepository imgRepository;
 
     @Override
     @Transactional

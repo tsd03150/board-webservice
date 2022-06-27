@@ -6,9 +6,11 @@ import com.kaveloper.portfolio.dto.BoardListResponseDTO;
 import com.kaveloper.portfolio.dto.BoardSaveRequestDTO;
 import com.kaveloper.portfolio.dto.PageRequestDTO;
 import com.kaveloper.portfolio.entity.Member;
+import com.kaveloper.portfolio.entity.UploadFile;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public interface BoardService {
 
@@ -26,7 +28,6 @@ public interface BoardService {
 
     // 게시글 수정 메서드
     void updateBoard(BoardSaveRequestDTO saveRequestDTO);
-
 
     // dto -> entity로 변환하는 메서드
     default Board dtoToEntity(BoardSaveRequestDTO dto, Long mid) {
