@@ -4,7 +4,6 @@ import com.kaveloper.portfolio.config.auth.LoginMember;
 import com.kaveloper.portfolio.config.auth.dto.SessionMember;
 import com.kaveloper.portfolio.dto.BoardListResponseDTO;
 import com.kaveloper.portfolio.dto.BoardSaveRequestDTO;
-import com.kaveloper.portfolio.dto.ImgSaveRequestDTO;
 import com.kaveloper.portfolio.dto.PageRequestDTO;
 import com.kaveloper.portfolio.entity.UploadFile;
 import com.kaveloper.portfolio.file.FileStore;
@@ -12,14 +11,21 @@ import com.kaveloper.portfolio.service.BoardService;
 import com.kaveloper.portfolio.service.ImgService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.util.UriUtils;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @Slf4j
@@ -35,23 +41,6 @@ public class BoardController {
     @GetMapping("/login")
     public String login() {
         return "board/login";
-    }
-
-    @GetMapping("/popupImg")
-    public String addImg(Model model) {
-        model.addAttribute("imgSaveRequestDTO", new ImgSaveRequestDTO());
-        return "board/popupImg";
-    }
-
-    @PostMapping("/popupImg")
-    public void saveImg(@ModelAttribute("imgSaveRequestDTO") ImgSaveRequestDTO requestDTO) throws IOException {
-        log.info("이미지를 입력합니다");
-        List<UploadFile> uploadFiles = fileStore.storeFiles(requestDTO.getImageFiles());
-
-        log.info("저장된 파일 : {}", uploadFiles);
-
-        // 데이터베이스에 저장
-        imgService.saveImg(uploadFiles);
     }
 
     @GetMapping("/list")
@@ -72,7 +61,6 @@ public class BoardController {
         if (member != null) {
             model.addAttribute("memberName", member.getName());
         }
-
         model.addAttribute("boardSaveRequestDTO", new BoardSaveRequestDTO());
 
         return "board/write";
@@ -81,7 +69,6 @@ public class BoardController {
     @PostMapping("/write")
     public String writeBoard(@Valid @ModelAttribute("boardSaveRequestDTO") BoardSaveRequestDTO boardSaveRequestDTO,
                              BindingResult bindingResult, @LoginMember SessionMember member, Model model) throws IOException {
-        log.info("글을 작성합니다");
 
         if (bindingResult.hasErrors()) {
             // @Valid 제약을 지키지 못하는 경우
@@ -90,14 +77,42 @@ public class BoardController {
             if (member != null) {
                 model.addAttribute("memberName", member.getName());
             }
-
             return "board/write";
         }
 
         log.info("등록한 글 {}", boardSaveRequestDTO);
-        boardService.saveBoard(boardSaveRequestDTO, member.getMid());
+        // 게시글 저장
+        Long bid = boardService.saveBoard(boardSaveRequestDTO, member.getMid());
+
+        // 이미지 서버 업로드
+        if (boardSaveRequestDTO.getImageFiles().size() != 0) {
+            List<UploadFile> uploadFiles = fileStore.storeFiles(boardSaveRequestDTO.getImageFiles(), bid);
+            log.info("저장된 파일 : {}", uploadFiles);
+
+            // 데이터베이스에 저장
+            imgService.saveImg(uploadFiles);
+        }
 
         return "redirect:/board/list";
+    }
+
+    // 게시글 본문에 이미지 보여주기
+    @ResponseBody
+    @GetMapping("/images/{filename}")
+    public Resource getBoardImage(@PathVariable String filename) throws MalformedURLException {
+        return new UrlResource("file:" + fileStore.getFullPath(filename));
+    }
+
+    // 이미지 다운로드
+    @GetMapping("/download/{storeFileName}/{uploadFileName}")
+    public ResponseEntity<Resource> downloadImage(@PathVariable String storeFileName, @PathVariable String uploadFileName) throws MalformedURLException {
+        UrlResource resource = new UrlResource("file:" + fileStore.getFullPath(storeFileName));
+        String encodeUploadFileName = UriUtils.encode(uploadFileName, StandardCharsets.UTF_8);
+        String contentDisposition = "attachment; filename=\"" + encodeUploadFileName + "\"";
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, contentDisposition)
+                .body(resource);
     }
 
     @GetMapping("/detail")
@@ -112,6 +127,7 @@ public class BoardController {
         }
 
         model.addAttribute("boardDTO", boardDTO);
+        model.addAttribute("imageFiles", imgService.getImages(bid));
     }
 
     @GetMapping("/update")

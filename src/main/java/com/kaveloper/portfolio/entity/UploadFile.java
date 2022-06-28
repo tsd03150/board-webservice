@@ -5,7 +5,6 @@ import lombok.*;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
-@ToString
 @Getter
 @Builder
 @AllArgsConstructor
@@ -15,6 +14,8 @@ public class UploadFile extends BaseEntity{
 
     @Id
     private String storeFileName;
+
     private String uploadFileName;
 
+    private Long bid;
 }

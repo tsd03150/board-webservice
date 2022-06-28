@@ -9,4 +9,6 @@ public interface ImgService {
     // 이미지 저장 메서드
     void saveImg(List<UploadFile> uploadFiles);
 
+    List<UploadFile> getImages(Long bid);
+
 }

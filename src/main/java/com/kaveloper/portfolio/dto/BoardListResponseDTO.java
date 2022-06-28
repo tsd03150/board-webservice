@@ -1,10 +1,12 @@
 package com.kaveloper.portfolio.dto;
 
+import com.kaveloper.portfolio.entity.UploadFile;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Builder
 @AllArgsConstructor
@@ -35,5 +37,6 @@ public class BoardListResponseDTO {
     private int replyCount; // 댓글 수
 
     private int nid; // 공지 사항 여부
+
 
 }

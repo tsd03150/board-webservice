@@ -19,4 +19,8 @@ public class ImgServiceImpl implements ImgService{
     public void saveImg(List<UploadFile> uploadFiles) {
         imgRepository.saveAll(uploadFiles);
     }
+
+    public List<UploadFile> getImages(Long bid) {
+        return imgRepository.findImageByBid(bid);
+    }
 }

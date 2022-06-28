@@ -18,7 +18,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // url별 권한 관리 설정
                 .authorizeRequests()
                 // permitAll()은 전체 사용자가 이용 가능
-                .antMatchers("/", "/starter-template.css", "/css/**", "/images/**", "/js/**", "/profile", "/board/list/**", "/board/detail/**", "/board/login/**").permitAll()
+                .antMatchers("/", "/starter-template.css", "/css/**", "/images/**", "/js/**", "/profile", "/board/list/**", "/board/detail/**", "/board/login/**", "/board/images/**","/board/download/**").permitAll()
                 // 나머지 url은 인증된 사용자만 사용가능
                 .anyRequest().authenticated()
 

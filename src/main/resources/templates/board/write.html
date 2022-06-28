@@ -9,7 +9,7 @@
 <div class="container">
     <h2>글 작성</h2>
     <hr>
-    <form th:action="@{/board/write}" th:object="${boardSaveRequestDTO}" method="post">
+    <form th:action="@{/board/write}" th:object="${boardSaveRequestDTO}" method="post" enctype="multipart/form-data">
         <input type="hidden" th:field="*{bid}">
         <div class="form-group">
             <label>제목</label>
@@ -21,20 +21,11 @@
         </div>
 
         <div class="form-group">
-            <label>내용</label>
+            <label>내용</label> <span class="txt_bar"> | </span>
+            <input type="file" multiple="multiple" th:field="*{imageFiles}" accept="image/*">
             <textarea class="form-control" th:field="*{content}" rows="15">
 
             </textarea>
-        </div>
-
-        <div class="form-group">
-            <div class="custom-file">
-                <label for="imageFiles" class="btn btn-primary">이미지</label>
-                <input type="file" class="custom-file-input" multiple="multiple" id="imageFiles" th:field="*{imageFiles}" onchange='test();'>
-            </div>
-
-            <label>첨부 파일</label>
-
 
         </div>
 
@@ -52,21 +43,19 @@
 </body>
 <div th:replace="fragments/common :: footer"></div>
 <script th:inline="javascript">
+    const imgForm = $("form"); //form 태그 객체
+
     window.cancel = function () {
         if (confirm("글 작성을 취소하시겠습니까?")) {
             window.location.replace("/board/list");
         }
     }
 
-    window.test = function () {
-        console.log("테스트");
+    window.uploadImg = function () {
+        imgForm
+            .attr("action", "/board/addImg")
+            .attr("method", "post")
+            .submit();
     }
-
-    $(".popupImg").click(function () {
-        window.open("/board/popupImg", "팝업 테스트", "width=800,height=600,top=100,left=100");
-    });
-
-
 </script>
 </html>
-

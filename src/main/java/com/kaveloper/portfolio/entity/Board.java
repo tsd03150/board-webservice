@@ -28,6 +28,7 @@ public class Board extends BaseEntity {
     // 공지 여부
     private int nid;
 
+    // 조회수
     private int count;
 
     public void changeTitle(String title) {

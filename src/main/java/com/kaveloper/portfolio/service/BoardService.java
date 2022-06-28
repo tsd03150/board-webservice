@@ -6,16 +6,14 @@ import com.kaveloper.portfolio.dto.BoardListResponseDTO;
 import com.kaveloper.portfolio.dto.BoardSaveRequestDTO;
 import com.kaveloper.portfolio.dto.PageRequestDTO;
 import com.kaveloper.portfolio.entity.Member;
-import com.kaveloper.portfolio.entity.UploadFile;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.List;
 
 public interface BoardService {
 
     // 게시글 등록
-    void saveBoard(BoardSaveRequestDTO requestDto, Long mid);
+    Long saveBoard(BoardSaveRequestDTO requestDto, Long mid);
 
     // 특정 게시글 조회
     BoardListResponseDTO getBoard(Long bid);

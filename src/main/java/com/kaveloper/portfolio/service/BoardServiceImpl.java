@@ -22,13 +22,12 @@ import java.util.function.Function;
 public class BoardServiceImpl implements BoardService {
 
     private final BoardRepository boardRepository;
-    private final ImgRepository imgRepository;
 
     @Override
     @Transactional
-    public void saveBoard(BoardSaveRequestDTO requestDto, Long mid) {
+    public Long saveBoard(BoardSaveRequestDTO requestDto, Long mid) {
         Board board = dtoToEntity(requestDto, mid);
-        boardRepository.save(board);
+        return boardRepository.save(board).getBid();
     }
 
     @Override

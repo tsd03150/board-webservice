@@ -16,8 +16,25 @@
     </div>
 
     <div class="form-group">
-        <textarea class="form-control" rows="15" name="content" readonly>[[${boardDTO.content}]]</textarea>
+        <img th:each="imageFile : ${imageFiles}" th:src="|/board/images/${imageFile.getStoreFileName()}|" width="300"
+             height="300"/>
     </div>
+
+    <div class="form-group" style="margin-bottom: 100px">
+        [[${boardDTO.content}]]
+    </div>
+
+    <hr>
+    <div class="form-group">
+        <label style="font-size: 15px"><b>첨부 이미지</b></label><br>
+        <p th:each="imageFile : ${imageFiles}">
+            <a th:if=|${imageFile}| th:href="|/board/download/${imageFile.getStoreFileName()}/${imageFile.getUploadFileName()}|"
+               th:text="${imageFile.getUploadFileName()}" style="font-size: 13px">
+            </a>
+        </p>
+    </div>
+    <hr>
+
 
     <div class="card mb-2">
         <div class="card-header bg-light">
