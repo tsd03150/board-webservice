@@ -9,19 +9,22 @@
     <h2>글 수정</h2>
     <hr>
     <!--페이지 번호-->
-    <form th:action="@{/board/update}" th:object="${boardDTO}" method="post">
-        <input type="hidden" name="page" th:value="${requestDTO.page}">
-        <input type="hidden" name="type" th:value="${requestDTO.type}">
-        <input type="hidden" name="keyword" th:value="${requestDTO.keyword}">
-        <input type="hidden" name="bid" th:value="${boardDTO.bid}">
-        <input type="hidden" name="mid" th:value="${boardDTO.mid}">
+    <form th:action="@{/board/update}" th:object="${boardDTO}" method="post" enctype="multipart/form-data">
+        <input type="hidden" th:field="${boardDTO.bid}">
+        <input type="hidden" th:field="${boardDTO.mid}">
 
         <div class="form-group">
             <label>제목</label>
             <input type="text" class="form-control"
                    th:class="${#fields.hasErrors('title')} ? 'form-control is-invalid' : 'form-control'"
                    th:field="*{title}">
-            <div class="invalid-feedback" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Incorrect date</div>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Incorrect date
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>이미지</label> <span class="txt_bar"> | </span>
+            <button type="button" class="btn btn-info updateImg"> 편집 </button><br>
         </div>
 
         <div class="form-group">
@@ -34,26 +37,26 @@
             <input type="text" class="form-control" id=author name="author" th:value="${memberName}" readonly>
         </div>
 
-    <hr>
+        <hr>
 
-    <div class="d-flex bd-highlight mb-3">
-        <div class="mr-auto p-2 bd-highlight"></div>
+        <div class="d-flex bd-highlight mb-3">
+            <div class="mr-auto p-2 bd-highlight"></div>
 
-        <div class="p-2 bd-highlight">
-            <a type="button" class="btn btn-secondary cancelBtn">취소</a>
-        </div>
-
-        <div class="p-2 bd-highlight">
-            <button type="button" class="btn btn-danger deleteBtn">삭제</button>
-        </div>
-
-        <div class="p-2 bd-highlight">
-            <div class="d-flex justify-content-end">
-                <button type="button" class="btn btn-primary updateBtn">완료</button>
+            <div class="p-2 bd-highlight">
+                <a type="button" class="btn btn-secondary cancelBtn">취소</a>
             </div>
-        </div>
 
-    </div>
+            <div class="p-2 bd-highlight">
+                <button type="button" class="btn btn-danger deleteBtn">삭제</button>
+            </div>
+
+            <div class="p-2 bd-highlight">
+                <div class="d-flex justify-content-end">
+                    <button type="button" class="btn btn-primary updateBtn">완료</button>
+                </div>
+            </div>
+
+        </div>
 
     </form>
 </div>
@@ -83,15 +86,18 @@
 
         actionForm.submit();
         alert("정상적으로 삭제되었습니다.");
+    });
 
+    $(".updateImg").click(function () {
+        window.open("popupImg/[[${boardDTO.bid}]]", "이미지 편집", "width=1200,height=800,top=100,left=300");
     });
 
     $(".updateBtn").click(function () {
+
         actionForm
             .attr("action", "/board/update") // action 요소에 /board/update를 가져온다
             .attr("method", "post") // action 요소에 post를 가져온다
             .submit();
-
     });
 </script>
 </html>

@@ -12,5 +12,6 @@ import java.util.List;
 @Data
 public class ImgSaveRequestDTO {
 
-    private List<MultipartFile> imageFiles;
+    private Long bid;
+    private List<MultipartFile> addImageFiles;
 }

@@ -14,5 +14,9 @@ public interface ImgRepository extends JpaRepository<UploadFile, String> {
             "where u.bid = :bid")
     List<UploadFile> findImageByBid(@Param("bid") Long bid);
 
+    void deleteUploadFileByBidAndStoreFileName(@Param("bid") Long bid, @Param("storeFileName") String storeFileName);
+
+
+
 
 }

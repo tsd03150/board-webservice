@@ -1,5 +1,6 @@
 package com.kaveloper.portfolio.service;
 
+import com.kaveloper.portfolio.dto.ImgDeleteRequestDTO;
 import com.kaveloper.portfolio.entity.UploadFile;
 
 import java.util.List;
@@ -11,4 +12,5 @@ public interface ImgService {
 
     List<UploadFile> getImages(Long bid);
 
+    void deleteImgFile(ImgDeleteRequestDTO deleteRequestDTO);
 }

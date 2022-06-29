@@ -1,16 +1,33 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/common :: head('이미지 업로드 하기')"></head>
+<head th:replace="fragments/common :: head('이미지 편집 하기')"></head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <body style="padding-top: 60px;padding-left: 15px">
-<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top imgPopup"><h5>이미지 업로드 하기</h5></nav>
+<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top imgPopup"><h5>이미지 편집 하기</h5></nav>
 
-<form th:action="@{/board/popupImg}" method="post" enctype="multipart/form-data" name="popupForm">
-    <input type="file" multiple="multiple" name="imageFiles" id="imageFiles">
-    <hr>
-    <div class="text-right">
-        <button type="button" class="btn btn-primary" style="margin-right: 15px" onclick="addImg()">적용</button>
+<form th:action="@{/board/popupImg}" method="post" enctype="multipart/form-data">
+    <input type="hidden" th:field="${bid}">
+
+    <div class="form-group">
+        <input type="file" multiple="multiple" name="addImageFiles" id="addImageFiles" accept="image/*">
+    </div>
+
+    <div class="form-group">
+        <span th:each="imageFile : ${imageFiles}">
+            <img th:src="|/board/images/${imageFile.getStoreFileName()}|"
+                 width="150"
+                 height="150"/>
+            <input class="form-check-input" type="radio" name="imageFile" th:value="${imageFile.getStoreFileName()}">
+
+        </span>
+
+        <hr>
+        <div class="text-right">
+            <button type="button" class="btn btn-danger" style="margin-right: 15px" onclick="deleteImg()">삭제</button>
+            <button type="button" class="btn btn-success" style="margin-right: 15px" onclick="addImg()">추가</button>
+            <button type="button" class="btn btn-primary" style="margin-right: 15px" onclick="applyImg()">확인</button>
+        </div>
     </div>
 </form>
 
@@ -19,11 +36,35 @@
 <div th:replace="fragments/common :: footer"></div>
 
 <script th:inline="javascript">
+    const addImgForm = $("form"); //form 태그 객체
 
     const addImg = function () {
-        document.popupForm.submit();
-        popupClose();
+        addImgForm
+            .attr("action", "/board/popupImg/" + [[${bid}]])
+            .attr("method", "post")
+            .submit();
+    };
+
+    const applyImg = function () {
         close();
+    };
+
+    const deleteImg = function () {
+        const deleteImgFile = {
+            bid: [[${bid}]],
+            deleteImgFileName: $('input[name=imageFile]:checked').val(),
+        };
+
+        $.ajax({
+            url: '/board/popupImg',
+            method: 'delete',
+            data: JSON.stringify(deleteImgFile),
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function () {
+                window.location.reload();
+            }
+        })
     };
 
     const popupClose = function () {

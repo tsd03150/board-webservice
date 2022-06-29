@@ -23,11 +23,16 @@
         <div class="form-group">
             <label>내용</label> <span class="txt_bar"> | </span>
             <input type="file" multiple="multiple" th:field="*{imageFiles}" accept="image/*">
-            <textarea class="form-control" th:field="*{content}" rows="15">
 
+            <textarea class="form-control" th:field="*{content}" rows="15">
             </textarea>
 
         </div>
+
+
+        <div class="form-group">
+        </div>
+
 
         <hr>
 
@@ -51,11 +56,5 @@
         }
     }
 
-    window.uploadImg = function () {
-        imgForm
-            .attr("action", "/board/addImg")
-            .attr("method", "post")
-            .submit();
-    }
 </script>
 </html>
