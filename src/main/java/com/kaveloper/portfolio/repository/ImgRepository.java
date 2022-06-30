@@ -11,7 +11,8 @@ public interface ImgRepository extends JpaRepository<UploadFile, String> {
 
     @Query("select u " +
             "from UploadFile u " +
-            "where u.bid = :bid")
+            "where u.bid = :bid " +
+            "order by u.regDate")
     List<UploadFile> findImageByBid(@Param("bid") Long bid);
 
     void deleteUploadFileByBidAndStoreFileName(@Param("bid") Long bid, @Param("storeFileName") String storeFileName);

@@ -20,4 +20,9 @@ public interface BoardRepository extends JpaRepository<Board, Long>, CustomBoard
     @Query("update Board b set b.count = b.count+1 where b.bid =:bid")
     void upViewCount(@Param("bid") Long bid);
 
+    // 조회 수가 감소하는 쿼리
+    @Modifying(clearAutomatically = true) // 벌크 연산
+    @Query("update Board b set b.count = b.count-1 where b.bid =:bid")
+    void getBoardNoCount(@Param("bid") Long bid);
+
 }
