@@ -9,11 +9,17 @@ import org.springframework.data.repository.query.Param;
 public interface BoardRepository extends JpaRepository<Board, Long>, CustomBoardRepository {
 
     // 한 게시글에 댓글이 없을 수도 있으니(null) left outer join
-    @Query("select b, a, count(r) " +
-            "from Board b left join b.author a " +
+    @Query("select b, a, count(r)" +
+            "from Board b " +
+            "left join Member a on b.author.mid = a.mid " +
             "left outer join Reply r on r.board = b " +
             "where b.bid = :bid")
     Object getBoardByBid(@Param("bid") Long bid);
+
+    @Query("select count(rc) " +
+            "from  ReplyComment rc " +
+            "where rc.board.bid = :bid")
+    Long getBoardReplyCount(@Param("bid") Long bid);
 
     // 조회 수가 증가하는 쿼리
     @Modifying(clearAutomatically = true) // 벌크 연산

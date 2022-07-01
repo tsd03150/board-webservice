@@ -7,6 +7,7 @@ import com.kaveloper.portfolio.entity.UploadFile;
 import com.kaveloper.portfolio.file.FileStore;
 import com.kaveloper.portfolio.service.BoardService;
 import com.kaveloper.portfolio.service.ImgService;
+import com.kaveloper.portfolio.service.ReplyCommentService;
 import com.kaveloper.portfolio.service.ReplyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,6 +39,7 @@ public class BoardController {
     private final FileStore fileStore;
     private final ImgService imgService;
     private final ReplyService replyService;
+    private final ReplyCommentService replyCommentService;
 
     @GetMapping("/login")
     public String login() {
@@ -110,6 +112,7 @@ public class BoardController {
 
         model.addAttribute("imageFiles", imgService.getImages(bid));
         model.addAttribute("replyDTO", replyService.getReplyList(bid));
+        model.addAttribute("replyCommentDTO", replyCommentService.getReplyCommentList(bid));
     }
 
     @GetMapping("/update")

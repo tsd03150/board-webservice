@@ -4,6 +4,7 @@
 
 <body>
 <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" th:replace="fragments/common :: menu('board')"></nav>
+
 <div class="container">
     <div class="form-group">
         <h3>[[${boardDTO.title}]]</h3>
@@ -46,62 +47,126 @@
 
         <!--댓글 리스트 조회-->
         <div class="container">
-            <div class="media text-muted pt-3" th:each="dto : ${replyDTO}">
-                <div class="media-body pb-1 mb-0 small lh-125 border-bottom border-gray">
-                    <div class="form-group">
-                        <span style="color: black"><b>&nbsp;[[${dto.author}]]</b></span>
-                        <span class="txt_bar"> | </span>
-                        <span style="padding-right: 5px">[[${#temporals.format(dto.regDate, 'yyyy/MM/dd/ HH:mm:ss')}]]</span>
+            <div th:each="dto : ${replyDTO}">
+                <div class="media text-muted pt-3">
+                    <div class="media-body pb-1 mb-0 small lh-125 border-bottom border-gray">
+                        <div class="form-group">
+                            <span style="color: black"><b>&nbsp;[[${dto.author}]]</b></span>
+                            <span class="txt_bar"> | </span>
+                            <span style="padding-right: 5px">[[${#temporals.format(dto.regDate, 'yyyy/MM/dd/ HH:mm:ss')}]]</span>
 
-                        <span th:if="${mid}==${dto.mid}">
-                        <span>
-                            <button type="button" class="btn btn-link deleteReplyBtn" th:rid="${dto.rid}"
-                                    onclick="deleteReplyBtn(this.getAttribute('rid'))">
-                                삭제
-                            </button>
-                        </span>
-                        </span>
+                            <span th:if="${mid}==${dto.mid}">
+                                <span style="margin-right: 5px">
+                                    <button type="button" class="btn btn-link deleteReplyBtn" th:rid="${dto.rid}"
+                                            onclick="deleteReplyBtn(this.getAttribute('rid'))">
+                                    삭제
+                                    </button>
+                                </span>
+                            </span>
 
-                    </div>
-
-                    <div class="form-group">
-                        <span class="d-block">&nbsp;[[${dto.text}]]</span>
+                            <span th:if="${memberName}!=null">
+                                <button type="button" class="btn btn-link writeReplyCommentBtn" th:rid="${dto.rid}"
+                                        onclick="writeReplyCommentBtn(this.getAttribute('rid'))">
+                                    답글
+                                </button>
+                            </span>
+                        </div>
+                        <div class="form-group">
+                            <span class="d-block">&nbsp;[[${dto.text}]]</span>
+                        </div>
                     </div>
                 </div>
+
+                <!--답글 작성-->
+                <div th:id="${dto.rid}" class="media text-muted pt-3" style="display: none">
+                    <div class="media-body pb-1 mb-0 small lh-125 border-bottom border-gray">
+                        <div class="form-group" style="margin-left: 30px">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">
+                                    <div th:if="${memberName}!=null">
+                                        <textarea class="form-control" th:id="replyCommentText+${dto.rid}" rows="3"
+                                                  placeholder="댓글을 입력해주세요."></textarea>
+                                    </div>
+
+                                    <div class="d-flex justify-content-end">
+                                        <button type="button" class="btn btn-primary mt-2" th:rid="${dto.rid}"
+                                                onclick="saveReplyCommentBtn(this.getAttribute('rid'))">
+                                            등록
+                                        </button>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!--대댓글 리스트 조회-->
+                <div th:each="replyComment : ${replyCommentDTO}">
+                    <div th:if="${replyComment.rid} == ${dto.rid}">
+                        <div class="media text-muted pt-3">
+                            <div class="media-body pb-1 mb-0 small lh-125 border-bottom border-gray">
+                                <div class="form-group" style="margin-left: 30px">
+                                    <div class="form-group" style="margin-bottom: 8px">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                             fill="currentColor" class="bi bi-arrow-return-right" viewBox="0 0 16 16"
+                                             color="red">
+                                            <path fill-rule="evenodd"
+                                                  d="M1.5 1.5A.5.5 0 0 0 1 2v4.8a2.5 2.5 0 0 0 2.5 2.5h9.793l-3.347 3.346a.5.5 0 0 0 .708.708l4.2-4.2a.5.5 0 0 0 0-.708l-4-4a.5.5 0 0 0-.708.708L13.293 8.3H3.5A1.5 1.5 0 0 1 2 6.8V2a.5.5 0 0 0-.5-.5z"/>
+                                        </svg>
+                                        <span style="color: black"><b>&nbsp;[[${replyComment.author}]]</b></span>
+                                        <span class="txt_bar"> | </span>
+                                        <span style="padding-right: 5px">[[${#temporals.format(replyComment.regDate, 'yyyy/MM/dd/ HH:mm:ss')}]]</span>
+                                        <span th:if="${mid}==${replyComment.mid}">
+                                            <span style="margin-right: 5px">
+                                                <button type="button" class="btn btn-link deleteReplyBtn" th:cid="${replyComment.cid}" th:rid="${replyComment.rid}"
+                                                        onclick="deleteReplyCommentBtn(this.getAttribute('rid'),this.getAttribute('cid'))">삭제</button>
+                                            </span>
+                                        </span>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <span class="d-block"
+                                              style="padding-top: 10px">&nbsp;[[${replyComment.text}]]</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
+    </div>
 
-        <!--댓글 입력 폼 -->
-        <form>
-            <div class="card-body">
-                <input type="hidden" th:field="${boardDTO.bid}">
-                <input type="hidden" th:field="${requestDTO.page}">
-                <input type="hidden" th:field="${requestDTO.type}">
-                <input type="hidden" th:field="${requestDTO.keyword}">
+    <hr style="background: blue">
+    <!--댓글 입력 폼 -->
+    <div class="form-group">
+        <input type="hidden" th:field="${boardDTO.bid}">
+        <input type="hidden" th:field="${requestDTO.page}">
+        <input type="hidden" th:field="${requestDTO.type}">
+        <input type="hidden" th:field="${requestDTO.keyword}">
 
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item" style="padding: 0">
 
-                        <div th:if="${memberName}==null">
+                <div th:if="${memberName}==null">
                     <textarea class="form-control" rows="3"
                               placeholder="로그인 후 댓글을 입력해주세요." readonly></textarea>
-                        </div>
+                </div>
 
-                        <div th:if="${memberName}!=null">
+                <div th:if="${memberName}!=null">
                     <textarea class="form-control" id="replyText" name="replyText" rows="3"
                               placeholder="댓글을 입력해주세요."></textarea>
-                        </div>
+                </div>
 
-                        <div class="d-flex justify-content-end">
-                            <button type="button" class="btn btn-primary mt-2 saveReplyBtn">등록</button>
-                        </div>
+                <div class="d-flex justify-content-end">
+                    <button type="button" class="btn btn-primary mt-2 saveReplyBtn">등록</button>
+                </div>
 
-                    </li>
-                </ul>
-            </div>
-        </form>
-
+            </li>
+        </ul>
     </div>
+    <hr style="background: blue">
 
     <div class="d-flex bd-highlight mb-3">
         <div class="mr-auto p-2 bd-highlight">
@@ -122,8 +187,6 @@
             </div>
         </div>
     </div>
-
-
 </div>
 
 </main><!-- /.container -->
@@ -131,9 +194,9 @@
 <div th:replace="fragments/common :: footer"></div>
 <!-- JQuery -->
 <script th:inline="javascript">
+    let num = 0;
 
     $(".saveReplyBtn").click(function () {
-
         const reply = {
             bid: $('#bid').val(),
             text: $('#replyText').val(),
@@ -167,7 +230,7 @@
         }
 
         const reply = {
-            rid : rid,
+            rid: rid,
             bid: $('#bid').val(),
             page: $('#page').val(),
             type: $('#type').val(),
@@ -187,5 +250,75 @@
             }
         })
     };
+
+    const writeReplyCommentBtn = function (rid) {
+        if (num === 0) {
+            num = rid
+        } else if (num !== rid) {
+            $("#" + num).toggle();
+            num = rid;
+        } else {
+            num = 0;
+        }
+        $("#" + rid).toggle();
+        document.getElementById("replyCommentText" + rid).value = '';
+    }
+
+    const saveReplyCommentBtn = function (rid) {
+        const replyComment = {
+            rid: rid,
+            bid: $('#bid').val(),
+            text: $('#replyCommentText' + rid).val(),
+            mid: [[${mid}]],
+            page: $('#page').val(),
+            type: $('#type').val(),
+            keyword: $('#keyword').val()
+        };
+
+        if (replyComment.text.length < 500 && replyComment.text.length > 0) {
+            $.ajax({
+                url: '/reply/add',
+                method: 'post',
+                data: JSON.stringify(replyComment),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                success: function () {
+                    window.location.href =
+                        '/board/detail?bid=' + replyComment.bid + '&page=' + replyComment.page + '&type=' + replyComment.type + '&keyword=' + replyComment.keyword;
+                }
+            })
+        } else {
+            alert("댓글은 1자 이상 500자 미만 입니다.")
+        }
+    };
+
+    const deleteReplyCommentBtn = function (rid, cid) {
+        if (!confirm("해당 댓글을 삭제하십니까?")) {
+            return;
+        }
+
+        const replyComment = {
+            cid: cid,
+            rid: rid,
+            bid: $('#bid').val(),
+            page: $('#page').val(),
+            type: $('#type').val(),
+            keyword: $('#keyword').val()
+        };
+
+        $.ajax({
+            url: '/reply/delete',
+            method: 'delete',
+            data: JSON.stringify(replyComment),
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function () {
+                window.location.href =
+                    '/board/detail?bid=' + replyComment.bid + '&page=' + replyComment.page + '&type=' + replyComment.type + '&keyword=' + replyComment.keyword;
+            }
+        })
+    };
+
 </script>
 </html>
+`

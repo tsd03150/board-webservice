@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.kaveloper.portfolio.entity.QBoard.*;
+import static com.kaveloper.portfolio.entity.QReplyComment.*;
 import static com.kaveloper.portfolio.entity.QMember.member;
 import static com.kaveloper.portfolio.entity.QReply.reply;
 
@@ -41,8 +42,12 @@ public class BoardRepositoryImpl implements CustomBoardRepository {
         Pageable pageable = requestDTO.getPageable(Sort.by("nid").descending()
                 .and(Sort.by("bid").descending()));
 
+        Long replyCount = query.select(replyComment.count())
+                .from(replyComment)
+                .where(replyComment.board.bid.eq(board.bid)).fetchOne();
+
         JPAQuery<Tuple> tuple = query
-                .select(board, member, reply.count())
+                .select(board, member, reply.count().add(replyCount))
                 .from(board)
                 .leftJoin(member).on(board.author.eq(member))
                 .leftJoin(reply).on(reply.board.eq(board))
@@ -54,9 +59,9 @@ public class BoardRepositoryImpl implements CustomBoardRepository {
                 .limit(pageable.getPageSize())
                 .orderBy(board.nid.desc(), board.bid.desc())
                 .fetch();
-
         // fetchResults(), fetchCount() 메서드가 deprecated 되었기 때문에
         // 전체 게시글이 몇 개 인지를 count 하는 쿼리를 따로 작성해두었다
+
         Long total = query.select(board.count())
                 .from(board)
                 .where(checkTypeOrKeywordEq(requestDTO.getType(), requestDTO.getKeyword()))

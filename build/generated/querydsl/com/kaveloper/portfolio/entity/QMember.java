@@ -23,6 +23,8 @@ public class QMember extends EntityPathBase<Member> {
 
     public final StringPath email = createString("email");
 
+    public final NumberPath<Long> mid = createNumber("mid", Long.class);
+
     //inherited
     public final DateTimePath<java.time.LocalDateTime> modeDate = _super.modeDate;
 
@@ -34,6 +36,8 @@ public class QMember extends EntityPathBase<Member> {
     public final DateTimePath<java.time.LocalDateTime> regDate = _super.regDate;
 
     public final EnumPath<Role> role = createEnum("role", Role.class);
+
+    public final StringPath webCode = createString("webCode");
 
     public QMember(String variable) {
         super(Member.class, forVariable(variable));

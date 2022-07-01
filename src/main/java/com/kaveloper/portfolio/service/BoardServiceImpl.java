@@ -33,10 +33,10 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public BoardListResponseDTO getBoard(Long bid) {
         Object result = boardRepository.getBoardByBid(bid);
-
+        Long replyCount = boardRepository.getBoardReplyCount(bid);
         Object[] list = (Object[]) result;
 
-        return entityToDTO((Board) list[0], (Member) list[1], (Long) list[2]);
+        return entityToDTO((Board) list[0], (Member) list[1], (Long) list[2] + replyCount);
     }
 
     @Override

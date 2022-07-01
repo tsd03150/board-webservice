@@ -4,7 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 
-@ToString(exclude = {""})
+@ToString(exclude = {"member", "board"})
 @Getter
 @Builder
 @AllArgsConstructor
