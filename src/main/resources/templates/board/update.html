@@ -83,9 +83,9 @@
 
         actionForm
             .attr("action", "/board/delete")
-            .attr("method", "post");
+            .attr("method", "post")
+            .submit();
 
-        actionForm.submit();
         alert("정상적으로 삭제되었습니다.");
     });
 
@@ -94,7 +94,6 @@
     });
 
     $(".updateBtn").click(function () {
-
         actionForm
             .attr("action", "/board/update") // action 요소에 /board/update를 가져온다
             .attr("method", "post") // action 요소에 post를 가져온다

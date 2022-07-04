@@ -14,7 +14,12 @@ public interface ReplyRepository extends JpaRepository<Reply, Long> {
     List<Reply> getRepliesByBoardOrderByRegDate(Board board);
 
     @Modifying
-    @Query("delete from Reply r where r.rid=:rid and r.board.bid=:bid")
-    void deleteReply(@Param("rid") Long rid, @Param("bid") Long bid);
+    @Query("delete from Reply r where r.rid=:rid")
+    void deleteReplyByRid(@Param("rid") Long rid);
+
+    @Modifying
+    @Query("delete from Reply r where r.board.bid=:bid")
+    void deleteReplyByBid(@Param("bid") Long bid);
+
 
 }

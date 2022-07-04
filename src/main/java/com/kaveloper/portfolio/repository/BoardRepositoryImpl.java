@@ -42,18 +42,13 @@ public class BoardRepositoryImpl implements CustomBoardRepository {
         Pageable pageable = requestDTO.getPageable(Sort.by("nid").descending()
                 .and(Sort.by("bid").descending()));
 
-        Long replyCount = query.select(replyComment.count())
-                .from(replyComment)
-                .where(replyComment.board.bid.eq(board.bid)).fetchOne();
-
         JPAQuery<Tuple> tuple = query
-                .select(board, member, reply.count().add(replyCount))
+                .select(board, member, reply.count())
                 .from(board)
                 .leftJoin(member).on(board.author.eq(member))
                 .leftJoin(reply).on(reply.board.eq(board))
                 .groupBy(board);
-        // 하나의 board를 기준으로 댓글(reply)들이 몇 개 달려 있는지 count함수를 사용하기 위해 board를 그룹으로 묶어줘야 한다
-        // 그래서 groupBy로 통해서 board를 그룹으로 묶어 준 뒤 where절을 쓸 수 없음으로 쿼리를 둘로 분리했다
+
         List<Tuple> content = tuple.where(checkTypeOrKeywordEq(requestDTO.getType(), requestDTO.getKeyword()))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())

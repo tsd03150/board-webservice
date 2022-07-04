@@ -37,7 +37,7 @@ public class ReplyController {
     @DeleteMapping
     public ResponseEntity<Long> delete(@RequestBody ReplyDeleteSaveRequestDTO deleteSaveRequestDTO) {
         replyService.deleteReply(deleteSaveRequestDTO);
-        log.info("삭제해야 할 댓글 : {} ", deleteSaveRequestDTO);
+        log.info("삭제한 댓글 : {} ", deleteSaveRequestDTO);
 
         return new ResponseEntity<>(deleteSaveRequestDTO.getRid(), HttpStatus.OK);
     }

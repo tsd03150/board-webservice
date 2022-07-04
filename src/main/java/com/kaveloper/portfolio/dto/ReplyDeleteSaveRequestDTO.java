@@ -9,7 +9,8 @@ import lombok.*;
 @Data
 public class ReplyDeleteSaveRequestDTO {
 
+    private Long bid;
+
     private Long rid;
 
-    private Long bid;
 }

@@ -53,6 +53,7 @@ public class BoardController {
 
         if (member != null) {
             model.addAttribute("memberName", member.getName());
+            log.info("현재 접속중인 멤버 {}", member);
         }
 
         return "board/list";
@@ -63,7 +64,9 @@ public class BoardController {
 
         if (member != null) {
             model.addAttribute("memberName", member.getName());
+            model.addAttribute("role", member.getRole());
         }
+
         model.addAttribute("boardSaveRequestDTO", new BoardSaveRequestDTO());
 
         return "board/write";
@@ -73,12 +76,14 @@ public class BoardController {
     public String writeBoard(@Valid @ModelAttribute("boardSaveRequestDTO") BoardSaveRequestDTO boardSaveRequestDTO,
                              BindingResult bindingResult, @LoginMember SessionMember member, Model model) throws IOException {
 
+        log.info("공지사항 여부 " + boardSaveRequestDTO.getNid());
         if (bindingResult.hasErrors()) {
             // @Valid 제약을 지키지 못하는 경우
             // 다시 글작성 뷰가 나와야 하는데
             // 이 때 로그인한 작성자 이름 또한 다시 나와야 한다
             if (member != null) {
                 model.addAttribute("memberName", member.getName());
+                model.addAttribute("role", member.getRole());
             }
             return "board/write";
         }
@@ -127,6 +132,7 @@ public class BoardController {
 
         if (member != null) {
             model.addAttribute("memberName", member.getName());
+            model.addAttribute("role", member.getRole());
             model.addAttribute("mid", member.getMid());
         }
 
@@ -144,6 +150,7 @@ public class BoardController {
             // 다시 글작성 뷰가 나와야 하는데
             // 이 때 로그인한 작성자 이름 또한 다시 나와야 한다
             if (member != null) {
+                model.addAttribute("role", member.getRole());
                 model.addAttribute("memberName", member.getName());
             }
             return "board/update";
@@ -151,6 +158,15 @@ public class BoardController {
 
         boardService.updateBoard(boardDTO);
         log.info("업데이트 할 글 : {}", boardDTO);
+
+        return "redirect:/board/list";
+    }
+
+    @PostMapping("/delete")
+    public String delete(@ModelAttribute("boardDTO") BoardSaveRequestDTO boardDTO) {
+
+        boardService.deleteBoard(boardDTO.getBid());
+        log.info("삭제한 게시글 : " + boardDTO.getBid());
 
         return "redirect:/board/list";
     }

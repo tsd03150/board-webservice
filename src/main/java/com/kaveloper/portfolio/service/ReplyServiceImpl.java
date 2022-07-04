@@ -5,7 +5,9 @@ import com.kaveloper.portfolio.dto.ReplyResponseDTO;
 import com.kaveloper.portfolio.dto.ReplySaveRequestDTO;
 import com.kaveloper.portfolio.entity.Board;
 import com.kaveloper.portfolio.entity.Reply;
+import com.kaveloper.portfolio.entity.ReplyComment;
 import com.kaveloper.portfolio.repository.BoardRepository;
+import com.kaveloper.portfolio.repository.ReplyCommentRepository;
 import com.kaveloper.portfolio.repository.ReplyRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +24,7 @@ public class ReplyServiceImpl implements ReplyService{
 
     private final ReplyRepository replyRepository;
     private final BoardRepository boardRepository;
+    private final ReplyCommentRepository replyCommentRepository;
 
     @Override
     public List<ReplyResponseDTO> getReplyList(Long bid) {
@@ -46,7 +49,12 @@ public class ReplyServiceImpl implements ReplyService{
     @Override
     @Transactional
     public void deleteReply(ReplyDeleteSaveRequestDTO deleteSaveRequestDTO) {
-        replyRepository.deleteReply(deleteSaveRequestDTO.getRid(), deleteSaveRequestDTO.getBid());
+        // 우선 대댓글 부터 삭제
+        replyCommentRepository.deleteReplyCommentByRid(deleteSaveRequestDTO.getRid());
+
+        // 댓글 삭제
+        replyRepository.deleteReplyByRid(deleteSaveRequestDTO.getRid());
+
         // 조회수 감소
         boardRepository.getBoardNoCount(deleteSaveRequestDTO.getBid());
     }

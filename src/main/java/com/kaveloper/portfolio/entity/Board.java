@@ -1,6 +1,7 @@
 package com.kaveloper.portfolio.entity;
 
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 
@@ -38,4 +39,5 @@ public class Board extends BaseEntity {
     public void changeContent(String content) {
         this.content = content;
     }
+
 }

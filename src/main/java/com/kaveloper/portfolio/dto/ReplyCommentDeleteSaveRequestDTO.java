@@ -11,7 +11,6 @@ public class ReplyCommentDeleteSaveRequestDTO {
 
     private Long cid;
 
-    private Long rid;
-
     private Long bid;
+
 }

@@ -59,7 +59,7 @@ public class ReplyCommentServiceImpl implements ReplyCommentService{
     @Override
     @Transactional
     public void deleteReplyComment(ReplyCommentDeleteSaveRequestDTO replyCommentDTO) {
-        replyCommentRepository.deleteReplyComment(replyCommentDTO.getCid(), replyCommentDTO.getRid(), replyCommentDTO.getBid());
+        replyCommentRepository.deleteReplyCommentByCid(replyCommentDTO.getCid());
         // 조회수 감소
         boardRepository.getBoardNoCount(replyCommentDTO.getBid());
     }

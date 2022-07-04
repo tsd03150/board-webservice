@@ -16,9 +16,16 @@ public interface ReplyCommentRepository extends JpaRepository<ReplyComment, Long
     List<ReplyComment> getReplyCommentByBoardAndReplyOrderByRegDate(Board board, Reply reply);
 
     @Modifying
-    @Query("delete from ReplyComment rc where rc.cid =:cid and rc.reply.rid=:rid and rc.board.bid=:bid")
-    void deleteReplyComment(@Param("cid") Long cid, @Param("rid") Long rid, @Param("bid") Long bid);
+    @Query("delete from ReplyComment rc where rc.cid =:cid")
+    void deleteReplyCommentByCid(@Param("cid") Long cid);
 
+    @Modifying
+    @Query("delete from ReplyComment rc where rc.reply.rid=:rid")
+    void deleteReplyCommentByRid(@Param("rid") Long rid);
+
+    @Modifying
+    @Query("delete from ReplyComment rc where rc.board.bid=:bid")
+    void deleteReplyCommentByBid(@Param("bid") Long bid);
 
 
 }

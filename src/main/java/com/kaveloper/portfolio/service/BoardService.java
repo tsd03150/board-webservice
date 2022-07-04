@@ -27,6 +27,8 @@ public interface BoardService {
     // 게시글 수정 메서드
     void updateBoard(BoardSaveRequestDTO saveRequestDTO);
 
+    void deleteBoard(Long bid);
+
     // dto -> entity로 변환하는 메서드
     default Board dtoToEntity(BoardSaveRequestDTO dto, Long mid) {
         Member member = Member.builder().mid(mid).build();
@@ -36,9 +38,18 @@ public interface BoardService {
                 .title(dto.getTitle())
                 .content(dto.getContent())
                 .author(member)
+                .nid(getNotice(dto.getNid()))
                 .build();
 
         return board;
+    }
+
+    default int getNotice(Long nid) {
+        if (nid == null) {
+            return 0;
+        } else {
+            return nid.intValue();
+        }
     }
 
     // entity -> dto로 변환하는 메서드

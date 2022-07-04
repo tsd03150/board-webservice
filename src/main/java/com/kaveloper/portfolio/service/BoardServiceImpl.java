@@ -8,6 +8,8 @@ import com.kaveloper.portfolio.dto.BoardSaveRequestDTO;
 import com.kaveloper.portfolio.dto.PageRequestDTO;
 import com.kaveloper.portfolio.repository.BoardRepository;
 import com.kaveloper.portfolio.repository.ImgRepository;
+import com.kaveloper.portfolio.repository.ReplyCommentRepository;
+import com.kaveloper.portfolio.repository.ReplyRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
@@ -22,6 +24,9 @@ import java.util.function.Function;
 public class BoardServiceImpl implements BoardService {
 
     private final BoardRepository boardRepository;
+    private final ReplyRepository replyRepository;
+    private final ReplyCommentRepository replyCommentRepository;
+    private final ImgRepository imgRepository;
 
     @Override
     @Transactional
@@ -51,16 +56,32 @@ public class BoardServiceImpl implements BoardService {
         Board board = boardRepository.getById(requestDTO.getBid());
         board.changeTitle(requestDTO.getTitle());
         board.changeContent(requestDTO.getContent());
+
         boardRepository.save(board);
     }
 
     @Override
     public PageResultDTO<BoardListResponseDTO, Object[]> getList(PageRequestDTO pageRequestDTO) {
 
-        Function<Object[], BoardListResponseDTO> fn = (list -> entityToDTO((Board) list[0], (Member) list[1], (Long) list[2]));
-
         Page<Object[]> content = boardRepository.getBoardListWithSearchCondition(pageRequestDTO);
 
+        Function<Object[], BoardListResponseDTO> fn = (list -> entityToDTO((Board) list[0], (Member) list[1], (Long) list[2]
+                + boardRepository.getBoardReplyCount(((Board) list[0]).getBid())
+        ));
+
         return new PageResultDTO<>(content, fn);
+    }
+
+    @Override
+    @Transactional
+    public void deleteBoard(Long bid) {
+        // 대댓글 삭제
+        replyCommentRepository.deleteReplyCommentByBid(bid);
+        // 댓글 삭제
+        replyRepository.deleteReplyByBid(bid);
+        // 이미지 삭제
+        imgRepository.deleteImgByBid(bid);
+        // 마지막으로 게시글 삭제
+        boardRepository.deleteBoardByBid(bid);
     }
 }

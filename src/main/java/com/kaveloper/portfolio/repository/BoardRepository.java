@@ -31,4 +31,9 @@ public interface BoardRepository extends JpaRepository<Board, Long>, CustomBoard
     @Query("update Board b set b.count = b.count-1 where b.bid =:bid")
     void getBoardNoCount(@Param("bid") Long bid);
 
+    @Modifying
+    @Query("delete from Board b where b.bid=:bid")
+    void deleteBoardByBid(@Param("bid") Long bid);
+
+
 }
