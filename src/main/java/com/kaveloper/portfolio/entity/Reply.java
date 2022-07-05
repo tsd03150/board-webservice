@@ -24,6 +24,7 @@ public class Reply extends BaseEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long rid;
 
+    @Column(length = 500, nullable = false)
     private String text;
 
     @ManyToOne(fetch = FetchType.LAZY)

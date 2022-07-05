@@ -17,8 +17,8 @@
     </div>
 
     <div class="form-group">
-        <img th:each="imageFile : ${imageFiles}" th:src="|/board/images/${imageFile.getStoreFileName()}|" width="300"
-             height="300"/>
+        <img th:each="imageFile : ${imageFiles}" th:src="|/board/images/${imageFile.getStoreFileName()}|" width="400"
+             height="400"/>
     </div>
 
     <div class="form-group">
@@ -26,7 +26,6 @@
             <pre style="font-size: 1em">[[${boardDTO.content}]]</pre>
         </div>
     </div>
-
 
     <hr>
     <div class="form-group">

@@ -16,6 +16,7 @@ public class ReplyComment extends BaseEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long cid;
 
+    @Column(length = 500, nullable = false)
     private String text;
 
     @ManyToOne(fetch = FetchType.LAZY)
