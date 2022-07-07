@@ -168,6 +168,7 @@ public class BoardController {
         boardService.deleteBoard(boardDTO.getBid());
         log.info("삭제한 게시글 : " + boardDTO.getBid());
 
+
         return "redirect:/board/list";
     }
 
