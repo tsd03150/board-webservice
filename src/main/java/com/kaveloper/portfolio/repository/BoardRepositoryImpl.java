@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.kaveloper.portfolio.entity.QBoard.*;
-import static com.kaveloper.portfolio.entity.QReplyComment.*;
 import static com.kaveloper.portfolio.entity.QMember.member;
 import static com.kaveloper.portfolio.entity.QReply.reply;
 

@@ -53,7 +53,6 @@ public class BoardController {
 
         if (member != null) {
             model.addAttribute("memberName", member.getName());
-            log.info("현재 접속중인 멤버 {}", member);
         }
 
         return "board/list";
@@ -142,9 +141,6 @@ public class BoardController {
     @PostMapping("/update")
     public String updateBoard(@Valid @ModelAttribute("boardDTO") BoardSaveRequestDTO boardDTO, BindingResult bindingResult,
                               @LoginMember SessionMember member, Model model) {
-        log.info("업데이트를 시작합니다.");
-        log.info("업데이트 할 글 : {}", boardDTO);
-
         if (bindingResult.hasErrors()) {
             // @Valid 제약을 지키지 못하는 경우
             // 다시 글작성 뷰가 나와야 하는데
@@ -157,7 +153,7 @@ public class BoardController {
         }
 
         boardService.updateBoard(boardDTO);
-        log.info("업데이트 할 글 : {}", boardDTO);
+        log.info("업데이트 한 글 : {}", boardDTO);
 
         return "redirect:/board/list";
     }
@@ -167,7 +163,6 @@ public class BoardController {
 
         boardService.deleteBoard(boardDTO.getBid());
         log.info("삭제한 게시글 : " + boardDTO.getBid());
-
 
         return "redirect:/board/list";
     }
@@ -225,6 +220,4 @@ public class BoardController {
 
         return new ResponseEntity<>(deleteRequestDTO.getBid(), HttpStatus.OK);
     }
-
-
 }

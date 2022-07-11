@@ -37,7 +37,7 @@ public class ReplyController {
     @DeleteMapping
     public ResponseEntity<Long> delete(@RequestBody ReplyDeleteSaveRequestDTO deleteSaveRequestDTO) {
         replyService.deleteReply(deleteSaveRequestDTO);
-        log.info("삭제한 댓글 : {} ", deleteSaveRequestDTO);
+        log.info("삭제된 댓글 : {} ", deleteSaveRequestDTO);
 
         return new ResponseEntity<>(deleteSaveRequestDTO.getRid(), HttpStatus.OK);
     }
@@ -56,6 +56,8 @@ public class ReplyController {
     @DeleteMapping("/delete")
     public ResponseEntity<Long> delete(@RequestBody ReplyCommentDeleteSaveRequestDTO replyCommentDeleteSaveRequestDTO) {
         replyCommentService.deleteReplyComment(replyCommentDeleteSaveRequestDTO);
+
+        log.info("삭제된 대댓글 : {}", replyCommentDeleteSaveRequestDTO);
 
         return new ResponseEntity<>(replyCommentDeleteSaveRequestDTO.getCid(), HttpStatus.OK);
     }

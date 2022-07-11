@@ -3,7 +3,6 @@ package com.kaveloper.portfolio.service;
 import com.kaveloper.portfolio.dto.ReplyCommentDeleteSaveRequestDTO;
 import com.kaveloper.portfolio.dto.ReplyCommentResponseDTO;
 import com.kaveloper.portfolio.dto.ReplyCommentSaveRequestDTO;
-import com.kaveloper.portfolio.dto.ReplyDeleteSaveRequestDTO;
 import com.kaveloper.portfolio.entity.Board;
 import com.kaveloper.portfolio.entity.Member;
 import com.kaveloper.portfolio.entity.Reply;

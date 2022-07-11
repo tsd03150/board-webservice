@@ -5,7 +5,6 @@ import com.kaveloper.portfolio.dto.ReplyResponseDTO;
 import com.kaveloper.portfolio.dto.ReplySaveRequestDTO;
 import com.kaveloper.portfolio.entity.Board;
 import com.kaveloper.portfolio.entity.Reply;
-import com.kaveloper.portfolio.entity.ReplyComment;
 import com.kaveloper.portfolio.repository.BoardRepository;
 import com.kaveloper.portfolio.repository.ReplyCommentRepository;
 import com.kaveloper.portfolio.repository.ReplyRepository;
